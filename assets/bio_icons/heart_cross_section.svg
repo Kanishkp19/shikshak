@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="400" height="350">
+  <!-- Heart Cross-Section -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Superior Vena Cava & Aorta arches -->
+    <path d="M120,60 L120,120 M140,40 L140,110" stroke="#3b82f6" stroke-width="12"/>
+    <path d="M170,40 C170,20 220,15 240,40 C250,55 245,85 240,120" stroke="#ef4444" stroke-width="16"/>
+    <!-- Pulmonary Artery branch -->
+    <path d="M180,90 C200,80 270,75 285,95" stroke="#3b82f6" stroke-width="12"/>
+    <!-- Heart Wall Muscle Outer Outline -->
+    <path d="M110,130 C70,160 75,250 170,320 C200,340 210,340 240,320 C335,250 340,160 300,130 C270,110 230,130 205,145 C180,130 140,110 110,130 Z" fill="#fee2e2" stroke="#dc2626" stroke-width="6"/>
+    <!-- Internal Septum and Myocardium -->
+    <path d="M195,150 L195,300 C195,315 215,315 215,300 L215,150" fill="#fca5a5" stroke="#dc2626" stroke-width="4"/>
+    <!-- Right Atrium Cavity (anatomical right = left side) -->
+    <path d="M115,145 C100,165 105,195 130,200 C155,205 180,185 180,155 Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="3"/>
+    <!-- Right Ventricle Cavity -->
+    <path d="M125,220 C110,250 140,285 180,290 L180,225 Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="3"/>
+    <!-- Left Atrium Cavity -->
+    <path d="M230,155 C230,185 255,205 280,200 C305,195 310,165 295,145 Z" fill="#fecaca" stroke="#ef4444" stroke-width="3"/>
+    <!-- Left Ventricle Cavity (thicker myocardium) -->
+    <path d="M230,225 L230,290 C270,285 295,250 285,220 Z" fill="#fecaca" stroke="#ef4444" stroke-width="3"/>
+    <!-- Valves -->
+    <line x1="130" y1="205" x2="175" y2="215" stroke="#64748b" stroke-width="3"/>
+    <line x1="235" y1="215" x2="280" y2="205" stroke="#64748b" stroke-width="3"/>
+  </g>
+</svg>

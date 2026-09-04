@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" width="400" height="320">
+  <!-- Animal Cell -->
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Irregular Cell Membrane / Cytoplasm -->
+    <path d="M70,80 C130,30 290,40 340,90 C390,140 370,240 310,280 C250,310 130,300 70,260 C20,220 20,130 70,80 Z" fill="#fef9c3" stroke="#eab308" stroke-width="5"/>
+    <!-- Centered Nucleus with Nuclear Membrane -->
+    <circle cx="190" cy="160" r="42" fill="#fed7aa" stroke="#ea580c" stroke-width="3"/>
+    <!-- Nucleolus -->
+    <circle cx="180" cy="150" r="14" fill="#c2410c"/>
+    <!-- Mitochondria -->
+    <g fill="#fecaca" stroke="#dc2626" stroke-width="2">
+      <ellipse cx="100" cy="120" rx="22" ry="12" transform="rotate(-30 100 120)"/>
+      <ellipse cx="290" cy="120" rx="20" ry="11" transform="rotate(45 290 120)"/>
+      <ellipse cx="270" cy="230" rx="24" ry="12" transform="rotate(-20 270 230)"/>
+      <ellipse cx="110" cy="220" rx="20" ry="10" transform="rotate(35 110 220)"/>
+    </g>
+    <!-- Endoplasmic Reticulum / Ribosomes -->
+    <path d="M140,160 C125,170 125,190 140,195 M145,150 C120,155 120,205 145,205" fill="none" stroke="#8b5cf6" stroke-width="2.5"/>
+    <!-- Golgi Apparatus -->
+    <path d="M255,160 C265,150 265,170 275,165 M250,175 C265,165 265,185 280,180" fill="none" stroke="#06b6d4" stroke-width="3"/>
+  </g>
+</svg>

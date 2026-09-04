@@ -1,0 +1,187 @@
+# ==============================================================================
+# Shikshak AI — Root .gitignore
+# Full-stack Next.js 15, FastAPI, Celery, Remotion & ML Pipeline
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Environment Variables & Secrets (CRITICAL)
+# ------------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.*.example
+apps/*/.env*
+!apps/*/.env.example
+!apps/*/.env.*.example
+packages/*/.env*
+!packages/*/.env.example
+
+# Private keys and certificates
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+
+# ------------------------------------------------------------------------------
+# 2. Operating System & IDE Artifacts
+# ------------------------------------------------------------------------------
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# IDEs and Editors
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+
+# Antigravity IDE / local agent state
+.antigravity/
+
+# ------------------------------------------------------------------------------
+# 3. Node.js / Web / TypeScript (apps/web & packages/motion-engine)
+# ------------------------------------------------------------------------------
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build outputs
+.next/
+out/
+build/
+dist/
+.turbo/
+.vercel/
+
+# TypeScript & Cache
+*.tsbuildinfo
+.eslintcache
+.cache/
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------------------------------------------------------------
+# 4. Python / FastAPI / Celery (apps/api)
+# ------------------------------------------------------------------------------
+# Bytecode and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Package distributions
+*.egg-info/
+.installed.cfg
+*.egg
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.hypothesis/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Celery
+celerybeat-schedule
+celerybeat-schedule.db
+celerybeat.pid
+*.pid
+
+# ------------------------------------------------------------------------------
+# 5. Heavy AI Models & Model Weights (>100MB breaks GitHub push)
+# ------------------------------------------------------------------------------
+# Large model binaries and checkpoints
+*.pth
+*.pt
+*.onnx
+*.bin
+*.ckpt
+*.safetensors
+*.h5
+
+# Specific model engines / cloned sub-repos
+Wav2Lip/
+**/Wav2Lip/
+models/xtts_v2/
+**/models/xtts_v2/
+**/checkpoints/
+**/weights/
+
+# ------------------------------------------------------------------------------
+# 6. Generated Media, Video Renders & Debug Dumps
+# ------------------------------------------------------------------------------
+/tmp/shikshak_*
+tmp/
+**/tmp/
+screenshots-debug/
+apps/api/results/
+apps/api/temp/
+apps/api/outputs/
+apps/api/output/
+render_cache/
+*.tmp
+
+# ------------------------------------------------------------------------------
+# 7. Supabase Local CLI
+# ------------------------------------------------------------------------------
+supabase/.branches/
+supabase/.temp/
+.supabase/
+
+# ------------------------------------------------------------------------------
+# 8. Graphify AST Cache
+# ------------------------------------------------------------------------------
+graphify-out/cache/
+
+# ------------------------------------------------------------------------------
+# 9. Local Development Tools & Utilities
+# ------------------------------------------------------------------------------
+tools/
+
+

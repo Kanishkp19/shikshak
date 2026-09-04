@@ -1,0 +1,16 @@
+# Biological Illustrations Asset Attribution
+
+The biological illustration vector icons in this directory are sourced from BioIcons (https://bioicons.com), an open-access library of scientific illustrations.
+
+Attribution Details:
+- Heart Cross-Section: Adapted from BioIcons / CC-BY 4.0
+- Neuron Structure: Adapted from BioIcons / CC-BY 4.0
+- Flower Cross-Section: Adapted from BioIcons / CC-BY 4.0
+- Plant Cell: Adapted from BioIcons / CC-BY 4.0
+- Animal Cell: Adapted from BioIcons / CC-BY 4.0
+- Eye Cross-Section: Adapted from BioIcons / CC-BY 4.0
+- Nephron Structure: Adapted from BioIcons / CC-BY 4.0
+- DNA Double Helix: Adapted from BioIcons / CC-BY 4.0
+
+License: Creative Commons Attribution 4.0 International (CC BY 4.0) & Public Domain CC0.
+Free to use, share, and adapt with appropriate credit.

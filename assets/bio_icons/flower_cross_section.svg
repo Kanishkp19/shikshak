@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="400" height="350">
+  <!-- Flower Cross-Section -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Receptacle & Pedicel -->
+    <path d="M200,340 L200,280" stroke="#15803d" stroke-width="8"/>
+    <path d="M165,280 C165,260 235,260 235,280 Z" fill="#bbf7d0" stroke="#16a34a" stroke-width="4"/>
+    <!-- Sepals -->
+    <path d="M165,270 C130,280 110,260 100,240 C125,245 155,255 170,265" fill="#86efac" stroke="#15803d" stroke-width="3"/>
+    <path d="M235,270 C270,280 290,260 300,240 C275,245 245,255 230,265" fill="#86efac" stroke="#15803d" stroke-width="3"/>
+    <!-- Petals -->
+    <path d="M150,260 C80,240 50,150 90,80 C130,130 160,180 170,240 Z" fill="#fbcfe8" stroke="#db2777" stroke-width="3"/>
+    <path d="M250,260 C320,240 350,150 310,80 C270,130 240,180 230,240 Z" fill="#fbcfe8" stroke="#db2777" stroke-width="3"/>
+    <path d="M170,250 C140,170 160,60 200,40 C240,60 260,170 230,250 Z" fill="#f472b6" stroke="#db2777" stroke-width="3"/>
+    <!-- Stamens (Filament + Anther) -->
+    <path d="M175,240 C140,180 130,120 145,90" stroke="#ca8a04" stroke-width="3"/>
+    <ellipse cx="145" cy="85" rx="8" ry="6" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+    <path d="M225,240 C260,180 270,120 255,90" stroke="#ca8a04" stroke-width="3"/>
+    <ellipse cx="255" cy="85" rx="8" ry="6" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+    <!-- Pistil / Carpel (Ovary, Style, Stigma) -->
+    <path d="M175,250 C175,210 190,200 195,140 L195,90 L205,90 L205,140 C210,200 225,210 225,250 Z" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+    <!-- Stigma Lobes -->
+    <ellipse cx="200" cy="85" rx="10" ry="6" fill="#86efac" stroke="#15803d" stroke-width="2"/>
+    <!-- Ovules inside ovary -->
+    <circle cx="193" cy="230" r="5" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+    <circle cx="207" cy="230" r="5" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+  </g>
+</svg>

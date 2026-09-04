@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 340" width="420" height="340">
+  <!-- Nephron Structure -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Bowman's Capsule (Cup shape) -->
+    <path d="M80,80 C60,95 60,135 80,150 L110,140 C95,130 95,100 110,90 Z" fill="#fed7aa" stroke="#ea580c" stroke-width="3"/>
+    <!-- Glomerulus Capillary Tuft inside Capsule -->
+    <path d="M85,100 C75,115 100,120 90,130 C80,120 100,105 85,100" stroke="#ef4444" stroke-width="4"/>
+    <line x1="50" y1="95" x2="80" y2="105" stroke="#ef4444" stroke-width="3"/>
+    <line x1="50" y1="135" x2="80" y2="125" stroke="#ef4444" stroke-width="3"/>
+    <!-- Proximal Convoluted Tubule (PCT) -->
+    <path d="M110,140 C130,160 140,110 160,130 C180,150 170,190 190,200" stroke="#ca8a04" stroke-width="5"/>
+    <!-- Loop of Henle (Descending & Ascending limbs) -->
+    <path d="M190,200 L190,300 C190,320 220,320 220,300 L220,180" stroke="#ca8a04" stroke-width="5"/>
+    <!-- Distal Convoluted Tubule (DCT) -->
+    <path d="M220,180 C240,160 260,200 280,170 C300,140 310,150 330,130" stroke="#ca8a04" stroke-width="5"/>
+    <!-- Collecting Duct (Main vertical trunk) -->
+    <path d="M330,60 L330,320 M330,100 L350,90 M330,180 L350,170 M330,250 L350,240" stroke="#d97706" stroke-width="7"/>
+  </g>
+</svg>

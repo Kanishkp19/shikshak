@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 320" width="420" height="320">
+  <!-- Eye Cross-Section -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Sclera (Outer layer) -->
+    <path d="M120,95 C150,70 210,65 265,85 C320,105 350,150 350,160 C350,170 320,215 265,235 C210,255 150,250 120,225" stroke="#cbd5e1" stroke-width="8"/>
+    <!-- Cornea (Anterior bulging transparent curvature) -->
+    <path d="M120,95 C75,120 75,200 120,225" stroke="#38bdf8" stroke-width="6"/>
+    <!-- Choroid & Retina (Inner layer) -->
+    <path d="M135,110 C160,85 215,80 260,98 C305,116 335,150 335,160 C335,170 305,204 260,222 C215,240 160,235 135,210" stroke="#f87171" stroke-width="4"/>
+    <!-- Ciliary body & Iris -->
+    <path d="M125,105 L145,130" stroke="#b45309" stroke-width="5"/>
+    <path d="M125,215 L145,190" stroke="#b45309" stroke-width="5"/>
+    <!-- Biconvex Lens -->
+    <path d="M150,120 C165,135 165,185 150,200 C135,185 135,135 150,120 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>
+    <!-- Optic Nerve Exit (Posterior) -->
+    <path d="M335,150 L395,140 M335,170 L395,180" stroke="#fbbf24" stroke-width="5"/>
+    <path d="M340,152 L395,145 L395,175 L340,168 Z" fill="#fef08a" stroke="none"/>
+    <!-- Vitreous Humor region -->
+    <circle cx="230" cy="160" r="8" fill="#e2e8f0"/>
+  </g>
+</svg>

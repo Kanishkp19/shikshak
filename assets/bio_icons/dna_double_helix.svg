@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" width="420" height="300">
+  <!-- DNA Double Helix -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Base Pairs (Rungs) -->
+    <!-- A-T pairs (Blue/Red), G-C pairs (Green/Yellow) -->
+    <line x1="100" y1="150" x2="100" y2="150" stroke="#3b82f6" stroke-width="4"/>
+    <line x1="130" y1="110" x2="130" y2="190" stroke="#ef4444" stroke-width="4"/>
+    <line x1="160" y1="80" x2="160" y2="220" stroke="#10b981" stroke-width="4"/>
+    <line x1="190" y1="100" x2="190" y2="200" stroke="#f59e0b" stroke-width="4"/>
+    <line x1="220" y1="150" x2="220" y2="150" stroke="#3b82f6" stroke-width="4"/>
+    <line x1="250" y1="190" x2="250" y2="110" stroke="#ef4444" stroke-width="4"/>
+    <line x1="280" y1="220" x2="280" y2="80" stroke="#10b981" stroke-width="4"/>
+    <line x1="310" y1="200" x2="310" y2="100" stroke="#f59e0b" stroke-width="4"/>
+    <line x1="340" y1="150" x2="340" y2="150" stroke="#3b82f6" stroke-width="4"/>
+    <!-- Sugar-Phosphate Strand 1 -->
+    <path d="M70,150 C110,60 150,60 190,150 C230,240 270,240 310,150 C350,60 380,80 400,150" stroke="#0284c7" stroke-width="6"/>
+    <!-- Sugar-Phosphate Strand 2 -->
+    <path d="M70,150 C110,240 150,240 190,150 C230,60 270,60 310,150 C350,240 380,220 400,150" stroke="#0369a1" stroke-width="6"/>
+  </g>
+</svg>

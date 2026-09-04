@@ -1,0 +1,14 @@
+# Shikshak AI — local dev docker-compose
+# Only Redis is needed locally — Supabase is hosted (free tier).
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:

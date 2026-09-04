@@ -1,0 +1,7 @@
+"""Shikshak AI — placeholder teacher reference image.
+
+This file is intentionally empty. Replace `assets/teacher_ref.png` with a
+real 1:1 square photo of the teacher's face (front-facing, neutral
+expression) before recording the demo. Without a real reference image, the
+lip-sync rendering skill produces a still-frame fallback video.
+"""

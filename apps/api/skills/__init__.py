@@ -1,0 +1,1 @@
+"""Shikshak AI — skills package."""

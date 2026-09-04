@@ -1,0 +1,4 @@
+# Shikshak AI — frontend .eslintignore (Next.js default + project overrides)
+.next/
+node_modules/
+out/

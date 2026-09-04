@@ -1,0 +1,7 @@
+"""Shikshak AI — placeholder teacher reference voice.
+
+This file is intentionally empty. Replace `assets/teacher_voice.wav` with a
+real 5-15 second reference voice clip of the teacher's voice (clean, single
+speaker, no background music) before recording the demo. Without a real
+reference voice, the TTS skill produces a silent placeholder WAV.
+"""

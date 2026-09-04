@@ -1,0 +1,16 @@
+{
+  "name": "shikshak-ai",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "packages/*"
+  ],
+  "scripts": {
+    "remotion:studio": "npm --workspace=@shikshak/motion-engine run studio",
+    "render:scene": "npm --workspace=@shikshak/motion-engine run render",
+    "flow:chrome": "bash tools/google-flow-browser-mcp/scripts/start-browser.sh",
+    "flow:mcp": "node tools/google-flow-browser-mcp/src/index.js",
+    "flow:studio": "python3 apps/api/scripts/flow_studio.py"
+  }
+}
