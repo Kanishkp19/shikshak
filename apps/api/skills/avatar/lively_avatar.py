@@ -164,24 +164,47 @@ def generate_lively_avatar_video(
             # ── A. Natural Mouth & Jaw Motion ──
             if amp > 0.05:
                 # Active speech: natural jaw displacement and lip modulation
-                open_factor = min(1.0, (amp - 0.05) / 0.55)
-                vert_open = int(5 * open_factor)
-                horiz_stretch = int(1.5 * math.sin(frame_idx * 0.7) * open_factor)
+                open_factor = min(1.0, (amp - 0.05) / 0.50)
+                vert_open = int(12 * open_factor)
+                horiz_stretch = int(2.0 * math.sin(frame_idx * 0.7) * open_factor)
 
-                # Smooth lower jaw displacement with gradient blending (no artificial black shapes)
                 lower_src_y1 = mc_y + 1
-                lower_src_y2 = min(canvas_size, mc_y + mh + 10)
+                lower_src_y2 = min(canvas_size, mc_y + mh + 15)
                 lower_dst_y1 = lower_src_y1 + vert_open
                 lower_dst_y2 = min(canvas_size, lower_src_y2 + vert_open)
 
                 lip_w1 = max(0, mc_x - mw // 2 - horiz_stretch)
                 lip_w2 = min(canvas_size, mc_x + mw // 2 + horiz_stretch)
 
+                # Render subtle inner oral opening when mouth opens
+                if vert_open >= 3:
+                    cavity_y1 = mc_y + 1
+                    cavity_y2 = lower_dst_y1 + 1
+                    cv2.ellipse(
+                        frame,
+                        (mc_x, (cavity_y1 + cavity_y2) // 2),
+                        ((lip_w2 - lip_w1) // 3, max(2, (cavity_y2 - cavity_y1) // 2)),
+                        0, 0, 360,
+                        (45, 30, 55),
+                        -1,
+                        cv2.LINE_AA,
+                    )
+                    # Subtle upper teeth highlight
+                    cv2.ellipse(
+                        frame,
+                        (mc_x, cavity_y1 + 1),
+                        ((lip_w2 - lip_w1) // 4, 2),
+                        0, 0, 180,
+                        (190, 205, 215),
+                        -1,
+                        cv2.LINE_AA,
+                    )
+
                 if lower_dst_y2 > lower_dst_y1 and lower_src_y2 > lower_src_y1 and lip_w2 > lip_w1:
                     lip_patch = base_bgr[lower_src_y1:lower_src_y2, lip_w1:lip_w2]
                     h_patch = min(lip_patch.shape[0], lower_dst_y2 - lower_dst_y1)
                     if h_patch > 0:
-                        alpha = 0.90
+                        alpha = 0.92
                         frame[lower_dst_y1:lower_dst_y1 + h_patch, lip_w1:lip_w2] = cv2.addWeighted(
                             frame[lower_dst_y1:lower_dst_y1 + h_patch, lip_w1:lip_w2],
                             1.0 - alpha,

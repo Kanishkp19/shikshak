@@ -60,13 +60,13 @@ element has:
   - segment_type: "core" for main lesson content
 
 CRITICAL RULES:
-1. Start with a brief overview segment as the very first segment.
-2. Each subsequent segment MUST teach something specific and different.
+1. Dive directly into the core topic immediately. Never generate generic filler or introductory titles like "Fundamental Understanding", "Overview", or "Introduction". If the topic is Photosynthesis, start directly with Photosynthesis mechanisms, reactions, and equations.
+2. Each subsequent segment MUST teach something specific, distinct, and advanced.
 3. related_concepts MUST be genuinely related sub-topics.
 4. Limit segment count so total expected talking time fits the time budget at
    ~120 words per minute.
 5. At least one segment must have has_checkpoint=true when time_budget_minutes >= 10.
-6. The lesson should progress from foundational concepts to more complex ones.
+6. The lesson should progress from key mechanisms to deeper scientific principles.
 """
 
 

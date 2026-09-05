@@ -332,9 +332,10 @@ def _extract_sections(clean_pages: list[dict], doc_title: str) -> list[dict[str,
     """Extract structured sections from clean pages."""
     sections: list[dict[str, Any]] = []
 
-    # Initial Introduction / Overview section
+    # Initial section named directly from doc_title / topic
+    initial_heading = (doc_title or "Core Lesson Concepts").strip()
     current_sec: dict[str, Any] = {
-        "heading": "Introduction & Fundamental Concepts",
+        "heading": initial_heading,
         "level": 1,
         "page_start": 1,
         "page_end": 1,

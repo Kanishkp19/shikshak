@@ -86,3 +86,46 @@ def test_phase1_phase2_pipeline_topic_only():
     assert reteach["narration_script"]
     assert reteach["narration_script"] != checkpoint_seg["narration_script"]
     assert reteach["concept"].startswith("Re-teach")
+
+
+def test_personalization_topic_relevance_and_placeholder_filtering():
+    """Verify that personalization rejects generic placeholders and unrelated weak concepts,
+    starting directly on the requested topic."""
+    from agents.personalization import personalize
+
+    initial_plan = {
+        "topic": "Photosynthesis",
+        "segments": [
+            {"order": 1, "concept": "What is Photosynthesis Overview", "depth": "beginner"},
+            {"order": 2, "concept": "Role of Sunlight and Chlorophyll", "depth": "beginner"},
+        ],
+    }
+
+    # Case 1: Generic placeholder concept must be ignored
+    p1 = personalize(
+        plan=initial_plan,
+        level="beginner",
+        weak_concepts=["Fundamental understanding of the core idea", "core idea"],
+    )
+    assert len(p1["segments"]) == 2
+    assert p1["segments"][0]["concept"] == "What is Photosynthesis Overview"
+
+    # Case 2: Unrelated topic weak concept must be ignored
+    p2 = personalize(
+        plan=initial_plan,
+        level="beginner",
+        weak_concepts=["Quadratic Formula", "Newton's First Law"],
+    )
+    assert len(p2["segments"]) == 2
+    assert p2["segments"][0]["concept"] == "What is Photosynthesis Overview"
+
+    # Case 3: Genuinely relevant weak concept IS prepended
+    p3 = personalize(
+        plan=initial_plan,
+        level="beginner",
+        weak_concepts=["Chlorophyll Light Absorption in Photosynthesis"],
+    )
+    assert len(p3["segments"]) == 3
+    assert p3["segments"][0]["concept"] == "Recap: Chlorophyll Light Absorption in Photosynthesis"
+    assert p3["segments"][1]["concept"] == "What is Photosynthesis Overview"
+

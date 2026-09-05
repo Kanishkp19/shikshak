@@ -329,7 +329,7 @@ class DiagramProvider(VideoGenerationProvider):
             if isinstance(brief.scenes[0], dict) and brief.scenes[0].get("visual_mode"):
                 scenes_list = brief.scenes
 
-        if not scenes_list and brief.narration_script and not bio_structure and not is_circuit and not compound_name:
+        if not scenes_list and brief.narration_script:
             try:
                 from agents.scene_planning import plan_scenes_for_segment
                 from skills.quality_gate import audit_scenes_for_segment
@@ -343,7 +343,7 @@ class DiagramProvider(VideoGenerationProvider):
             except Exception as e:
                 print(f"[DiagramProvider] Scene planning fallback: {e}")
 
-        if scenes_list and not bio_structure and not is_circuit and not compound_name:
+        if scenes_list and len(scenes_list) >= 1:
             import shutil
             from agents.visual_selection import dispatch_scene_render
             from skills.video_stitching import concat_segments_with_transitions
@@ -370,7 +370,6 @@ class DiagramProvider(VideoGenerationProvider):
                 sc_out = Path("/tmp/shikshak_concept") / f"scene_{uuid.uuid4().hex}.mp4"
                 rendered = dispatch_scene_render(sc, duration_seconds=sc_dur, out_path=sc_out)
                 scene_paths.append(str(rendered))
-
 
             if len(scene_paths) == 1:
                 shutil.copy(scene_paths[0], str(target_path))
@@ -412,6 +411,36 @@ class DiagramProvider(VideoGenerationProvider):
         try:
             if bio_structure and BIO_ASSET_PATHS.get(bio_structure, Path()).is_file():
                 # ── Bio Illustration Mode ──
+                # If concept involves cellular/metabolic pathways (photosynthesis, respiration, chloroplast),
+                # dispatch to the fully animated biological process renderer with ATP/oxygen bursts and active organelles.
+                if any(k in brief.concept.lower() for k in ("photo", "chloro", "respir", "cellular", "thylakoid", "calvin")) or bio_structure == "plant_cell":
+                    try:
+                        proc.stdin.close()
+                        proc.wait(timeout=2)
+                    except Exception:
+                        pass
+                    from skills.scene_renderers.biology.bio_cellular_process import render_bio_cellular_process
+                    is_chloro = "photo" in brief.concept.lower() or "chloro" in brief.concept.lower() or bio_structure == "plant_cell"
+                    render_bio_cellular_process(
+                        payload_dict={
+                            "process_name": brief.concept,
+                            "organelle": "Chloroplast" if is_chloro else "Mitochondria",
+                            "overall_equation": "6CO₂ + 6H₂O + Sunlight → C₆H₁₂O₆ + 6O₂" if is_chloro else "C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + 38 ATP",
+                            "inputs": ["Carbon Dioxide (6CO₂)", "Water (6H₂O)"] if is_chloro else ["Glucose (C₆H₁₂O₆)", "Oxygen (6O₂)"],
+                            "energy_yield": "Chemical Energy (Glucose)" if is_chloro else "38 ATP Molecules",
+                            "key_takeaway": "Chlorophyll captures solar energy to convert CO₂ and water into glucose and oxygen." if is_chloro else "Aerobic respiration breaks down glucose to release cellular ATP energy.",
+                        },
+                        narration_text=brief.narration_script,
+                        duration_seconds=float(duration_seconds),
+                        out_path=target_path,
+                    )
+                    require_playable_video(target_path, min_width=1280, min_height=720, min_duration_seconds=1.0)
+                    return VideoGenerationResult(
+                        video_url=str(target_path),
+                        provider=self.name,
+                        cache_hit=False,
+                    )
+
                 callout_nodes = _extract_nodes_from_brief(brief, duration_ms)
                 req = BioIllustrationRequest(
                     structure=bio_structure,  # type: ignore

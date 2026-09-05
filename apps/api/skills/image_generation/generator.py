@@ -84,44 +84,7 @@ def generate_educational_image(
             shutil.copyfile(str(cached_path), str(out_path))
             return out_path
 
-    # 2. Try remote synthesis via Pollinations AI
-    encoded_prompt = urllib.parse.quote(prompt_data.prompt[:320])
-    url = (
-        f"https://image.pollinations.ai/prompt/{encoded_prompt}"
-        f"?width={width}&height={height}&nologo=true&seed={prompt_data.seed}"
-    )
-
-    ctx = ssl._create_unverified_context()
-    req = urllib.request.Request(
-        url,
-        headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ShikshakAI/1.0"},
-    )
-
-    try:
-        with urllib.request.urlopen(req, context=ctx, timeout=25) as resp:
-            data = resp.read()
-            if len(data) > 1000:
-                out_path.write_bytes(data)
-                try:
-                    with Image.open(out_path) as im:
-                        if im.size != (width, height):
-                            resized = im.resize((width, height), Image.Resampling.LANCZOS)
-                            resized.save(out_path, format="PNG")
-                            data = out_path.read_bytes()
-                except Exception as resize_err:
-                    logger.debug("[ImageGenerator] Resize skipped: %s", resize_err)
-
-                if cache is not None:
-                    cache.store(cache_key, data)
-                logger.info("[ImageGenerator] Synthesized image via Pollinations AI for %r", concept)
-                return out_path
-    except Exception as exc:
-        logger.info(
-            "[ImageGenerator] Pollinations AI unavailable (%s); generating pedagogical fallback canvas",
-            exc,
-        )
-
-    # 3. Deterministic Local Fallback Canvas
+    # 2. Pure Classroom Blackboard Concept & Formula Visual (No external stock photos)
     create_fallback_chalkboard_canvas(
         img_path=out_path,
         concept=prompt_data.concept,

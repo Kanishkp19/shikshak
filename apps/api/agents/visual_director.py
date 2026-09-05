@@ -20,7 +20,6 @@ from typing import Any, Optional
 
 from celery_app import celery_app
 from models import validate_visual_payload
-from skills.image_generation.generator import generate_educational_image
 from skills.quality_gate import audit_scenes_for_segment
 
 logger = logging.getLogger(__name__)
@@ -42,14 +41,15 @@ PHYSICS_CIRCUIT_KEYWORDS = re.compile(
 )
 
 PHYSICS_OPTICS_KEYWORDS = re.compile(
-    r"\b(convex lens|concave lens|refraction|ray diagram|focal length|principal axis|"
-    r"optical center|real image|virtual image|magnification|snell)\b",
+    r"\b(light|sunlight|reflection|reflect|vision|convex lens|concave lens|refraction|ray diagram|"
+    r"focal length|principal axis|optical center|real image|virtual image|magnification|snell|"
+    r"incident ray|reflected ray|refracted ray|plane mirror|prism|dispersion|spectrum|wavelength)\b",
     re.IGNORECASE,
 )
 
 PHYSICS_MIRROR_KEYWORDS = re.compile(
     r"\b(spherical mirror|concave mirror|convex mirror|mirror formula|radius of curvature|"
-    r"pole|focal point|reflection)\b",
+    r"pole|focal point|law of reflection|specular reflection)\b",
     re.IGNORECASE,
 )
 
@@ -194,10 +194,10 @@ def determine_visual_strategy(
         return "split_screen", "split_screen", _build_split_screen_payload(scene, segment_concept)
 
     # Default high-impact strategy for general / humanities / descriptive topics:
-    # Alternate between ai_illustration and split_screen to ensure rich visuals
+    # Alternate between ai_illustration (classroom smartboard) and split_screen (dual-pane)
     if scene_index % 2 == 1:
-        return "ai_illustration", "generate_ai_image", _build_ai_illustration_payload(scene, segment_concept)
-    return "split_screen", "split_screen", _build_split_screen_payload(scene, segment_concept)
+        return "ai_illustration", "classroom_board", _build_ai_illustration_payload(scene, segment_concept)
+    return "split_screen", "classroom_split", _build_split_screen_payload(scene, segment_concept)
 
 
 
@@ -439,20 +439,6 @@ def direct_scenes_for_segment(
         except Exception as exc:
             logger.warning("[VisualDirector] Payload validation for %s failed: %s; using generated payload", mode, exc)
             sc["visual_payload"] = payload
-
-        # Pre-synthesize images if requested and mode requires it
-        if generate_images and strategy == "generate_ai_image":
-            try:
-                img_path = generate_educational_image(
-                    concept=sc.get("learning_objective") or concept,
-                    visual_objective=sc.get("visual_objective") or sc.get("learning_objective", ""),
-                    entities=sc.get("entities", []),
-                    narration_span=sc.get("narration_text", "") or sc.get("narration_span", ""),
-                    forbidden_terms=sc.get("forbidden_terms", []),
-                )
-                sc["visual_payload"]["image_path"] = str(img_path)
-            except Exception as e:
-                logger.warning("[VisualDirector] Pre-generation of image failed: %s", e)
 
         directed_scenes.append(sc)
 

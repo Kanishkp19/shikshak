@@ -216,3 +216,74 @@
     background-position: 0 0, 0 8px;
   }
 }
+
+/* System-flow demo motion */
+@keyframes sf-stage-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sf-log-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes sf-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes sf-cursor-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.sf-stage-enter {
+  animation: sf-stage-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sf-log-enter {
+  animation: sf-log-enter 280ms ease-out both;
+}
+
+.sf-pulse {
+  animation: sf-pulse 1.2s ease-in-out infinite;
+}
+
+.sf-cursor-blink {
+  animation: sf-cursor-blink 1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-stage-enter,
+  .sf-log-enter,
+  .sf-pulse,
+  .sf-cursor-blink {
+    animation: none !important;
+  }
+}

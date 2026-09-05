@@ -121,9 +121,10 @@ class Wav2LipRenderer:
         base_bgr = cv2.resize(base_bgr, (canvas_size, canvas_size), interpolation=cv2.INTER_AREA)
 
         # Ground truth face bounding box on calibrated 512x512 portrait
-        # Teacher face box: y: 115..385, x: 155..357 (height 270, width 202)
-        fy1, fy2 = 115, 385
-        fx1, fx2 = 155, 357
+        # Teacher face box: y: 95..245, x: 181..331 (height 150, width 150)
+        # Positions eyes at row 37, nose at row 54, and mouth at row 70 (lower half)
+        fy1, fy2 = 95, 245
+        fx1, fx2 = 181, 331
         face_w = fx2 - fx1
         face_h = fy2 - fy1
 
@@ -131,7 +132,7 @@ class Wav2LipRenderer:
         face_resized = cv2.resize(face_crop, (96, 96))
         face_rgb = cv2.cvtColor(face_resized, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
 
-        # Mask lower half for Wav2Lip condition
+        # Mask lower half for Wav2Lip condition (rows 48-96, covering nose base to chin)
         masked_face = face_rgb.copy()
         masked_face[48:, :] = 0.0
 
@@ -170,11 +171,14 @@ class Wav2LipRenderer:
         proc = subprocess.Popen(ffmpeg_cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # Build feather mask for seamless mouth integration
-        # Only blend y > 40% of the face box (mouth & chin)
+        # Only blend y > 58% of the face box (mouth & chin, below nose tip at ~y=180)
         blend_mask = np.zeros((face_h, face_w), dtype=np.float32)
-        split_y = int(face_h * 0.46)
+        split_y = int(face_h * 0.58)
         blend_mask[split_y:, :] = 1.0
-        # Feather the transition boundary
+        # Feather border boundaries so there are no square seams on cheeks or chin
+        blend_mask[:, :12] = 0.0
+        blend_mask[:, -12:] = 0.0
+        blend_mask[-8:, :] = 0.0
         blend_mask = cv2.GaussianBlur(blend_mask, (21, 21), 0)
         blend_mask_3c = np.repeat(blend_mask[:, :, np.newaxis], 3, axis=2)
 

@@ -73,6 +73,30 @@ export default function DashboardPage() {
         </Link>
       </header>
 
+      {/* System brain walkthrough — for students & demo judges */}
+      <Link
+        href="/how-it-works"
+        className="mb-8 block rounded-xl border border-[var(--color-hairline)] bg-[var(--color-chalk-board)] p-5 text-[var(--color-chalk-text)] shadow-level-1 transition-transform hover:-translate-y-0.5 hover:shadow-level-2"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="max-w-xl">
+            <p className="text-[10.5px] font-mono uppercase tracking-wider text-[var(--color-accent-teal)] mb-1.5">
+              Behind the lesson
+            </p>
+            <h2 className="text-heading-3 font-serif text-[var(--color-chalk-text)] mb-1">
+              See how Shikshak thinks
+            </h2>
+            <p className="text-body-sm text-[var(--color-chalk-muted)]">
+              Interactive walkthrough of PDF ingest, agent planning, Socratic checkpoints, and
+              how your profile improves the next lesson.
+            </p>
+          </div>
+          <span className="inline-flex shrink-0 rounded-lg bg-white px-4 py-2 text-xs font-semibold text-[var(--color-primary)]">
+            Open system flow →
+          </span>
+        </div>
+      </Link>
+
       {/* Learner Progress & Mastery Garden Card */}
       <Card variant="elevated" className="mb-10 bg-[var(--color-canvas)]">
         <CardBody>

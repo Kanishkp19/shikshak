@@ -113,13 +113,13 @@ Supported Visual Modes across STEM & Humanities Domains:
    - "timeline_motion": Sequential historical milestones, multi-phase reaction progressions, or biological eras.
      visual_payload: {{"template": "timeline", "title": "Respiration Phases", "steps": ["Glycolysis in Cytoplasm", "Krebs Cycle in Matrix", "Oxidative Phosphorylation in Cristae"], "key_takeaway": "Generates 38 ATP molecules sequentially.", "badge": "BIO TIMELINE"}}
 
-6. GENERATIVE AI & DYNAMIC TYPOGRAPHY PACK:
-   - "ai_illustration": Synthesized pedagogical artwork for real-world phenomena, complex anatomical/environmental structures, historical contexts, or PDF lesson topics with cinematic camera motion.
-     visual_payload: {{"title": "Chloroplast Thylakoid Structure", "caption": "Membrane-bound compartments where light reactions occur", "prompt": "Detailed scientific illustration of chloroplast thylakoids and stroma", "style": "educational_illustration", "entities": ["Thylakoid", "Stroma", "Granum"], "key_takeaway": "Light absorption occurs within thylakoid membranes"}}
+6. CLASSROOM SMARTBOARD & DYNAMIC TYPOGRAPHY PACK:
+   - "ai_illustration": Classroom digital smartboard / chalkboard lecture card with glowing formulas, step-by-step physical derivations, and animated vector apparatus schematics. ZERO stock photos or realistic photographs.
+     visual_payload: {{"title": "Chloroplast Thylakoid Structure", "caption": "Membrane-bound compartments where light reactions occur", "formula": "6CO2 + 6H2O -> C6H12O6 + 6O2", "entities": ["Thylakoid", "Stroma", "Granum"], "key_takeaway": "Light absorption occurs within thylakoid membranes"}}
    - "kinetic_text": High-impact typographic concept card for core definitions, laws, or opening/closing takeaways.
      visual_payload: {{"title": "Newton's First Law of Motion", "subtitle": "The Law of Inertia", "key_takeaways": ["An object at rest stays at rest unless acted upon by an external force", "Inertia depends directly on mass"], "badge": "FUNDAMENTAL LAW", "equation": "F_net = 0 => dv/dt = 0"}}
-   - "split_screen": Dual-pane composition with schematic apparatus or illustration on left and structured takeaways/formula on right.
-     visual_payload: {{"left_title": "Electromagnetic Induction", "left_type": "image", "left_image_prompt": "Bar magnet moving through copper solenoid coil with galvanometer", "right_title": "Faraday's Law Observations", "right_points": ["Relative motion induces electromotive force", "Deflection direction reverses with magnet pole"], "formula": "emf = -N (dPhi/dt)", "key_takeaway": "Changing magnetic flux induces electric current"}}
+   - "split_screen": Dual-pane classroom composition with vector schematic apparatus on left and structured takeaways/formula on right.
+     visual_payload: {{"left_title": "Electromagnetic Induction", "left_type": "vector_schematic", "right_title": "Faraday's Law Observations", "right_points": ["Relative motion induces electromotive force", "Deflection direction reverses with magnet pole"], "formula": "emf = -N (dPhi/dt)", "key_takeaway": "Changing magnetic flux induces electric current"}}
 
 7. UNIVERSAL FALLBACK:
    - "generic_explainer": Illustrated concept cards with icons, equations, and takeaways.
@@ -127,25 +127,23 @@ Supported Visual Modes across STEM & Humanities Domains:
 
 CRITICAL RULES:
 1. Act as the Lead Educational Animator: plan 3 to 5 discrete, lively visual scenes for the segment narration.
-2. BAN STATIC SLIDESHOWS: NEVER create static PowerPoint-style cards with bullet-point lists of equations. Every formula MUST be animated within an active physical apparatus, step-by-step derivation, or dynamic split-screen.
-3. Select the MOST ACCURATE visual mode:
-   - Real-world objects, macroscopic phenomena, PDF textbook diagrams, environments -> "ai_illustration"
-   - Formal laws, definitions, summary cards, opening concept hooks -> "kinetic_text"
-   - Side-by-side visual apparatus + formula/principles -> "split_screen"
+2. ABSOLUTELY BAN ALL STOCK PHOTOS, REALISTIC PHOTOGRAPHS, AND IRRELEVANT IMAGES (e.g., desk lamps, computers, random real-world items, stock people). Every single scene MUST have an authentic CLASSROOM SMARTBOARD / CHALKBOARD VIBE. Focus 100% on formulas, mathematical derivations, scientific laws, concepts, and animations.
+3. BAN STATIC SLIDESHOWS: NEVER create static PowerPoint-style cards with bullet-point lists of equations. Every formula MUST be animated within an active physical apparatus, step-by-step derivation, or dynamic split-screen.
+4. Select the MOST ACCURATE visual mode:
+   - Light, Optics, Sunlight, Reflection, Refraction, Mirrors, Lenses, Vision -> ALWAYS "optics_ray_diagram" or "spherical_mirror". NEVER choose stock images or generic illustrations for optics.
+   - Photosynthesis, Cellular Respiration, Organelles -> "bio_cellular_process" with chemical equation (6CO2 + 6H2O -> C6H12O6 + 6O2) and organelle diagrams, or "step_flow".
    - Chemical reaction apparatus / beakers -> "reaction_lab"
    - Chemical formula combining / equation steps -> "equation_build"
    - Laboratory oxidation / heating experiment -> "experiment_observation"
    - Mass conservation / atom counting -> "balancing_exercise"
    - Electric circuits & schematics -> "circuit_simulation"
-   - Ray optics / refraction / reflection / lenses / image formation -> "optics_ray_diagram"
-   - Spherical mirror curvature / focal relations / pole & center of curvature -> "spherical_mirror"
-   - RULE FOR LIGHT & OPTICS: Never choose abstract "ai_illustration" for reflection, refraction, lenses, or mirrors; always route to "optics_ray_diagram" or "spherical_mirror".
-   - Cell organelles & anatomy -> "bio_cellular_process" or "anatomical_structure"
-   - Number line & coordinate geometry -> "number_line_geometry"
-   - Dynamic pedagogical flows & kinetic pathways -> "motion_graphic", "step_flow", or "timeline_motion"
-4. Each scene MUST focus on ONE dominant idea and ONE learning objective.
-5. Every visual_payload MUST match the exact fields required by its visual_mode.
-6. Return 3 to 5 scenes in strictly sequential scene_order (1, 2, 3...).
+   - Mathematics & Derivations -> "algebra_step_solve" or "number_line_geometry"
+   - Side-by-side visual apparatus + formula/principles -> "split_screen"
+   - Formal laws, definitions, summary cards, opening concept hooks -> "kinetic_text"
+   - Classroom Lecture Smartboard with Derivations & Vector Schematics -> "ai_illustration"
+5. Each scene MUST focus on ONE dominant idea and ONE learning objective.
+6. Every visual_payload MUST match the exact fields required by its visual_mode.
+7. Return 3 to 5 scenes in strictly sequential scene_order (1, 2, 3...).
 
 Return ONLY valid JSON matching this schema:
 {{

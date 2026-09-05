@@ -1,22 +1,22 @@
 # Graph Report - shikshak-ai  (2026-09-05)
 
 ## Corpus Check
-- 595 files · ~487,801 words
+- 598 files · ~494,182 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5950 nodes · 8821 edges · 429 communities (352 shown, 68 thin omitted)
+- 5992 nodes · 8869 edges · 431 communities (353 shown, 69 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 258 edges (avg confidence: 0.88)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b6347b1c`
+- Built from commit: `a9bacf4d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - models/__init__.py
-- llm.py
+- assessment.py
 - agents/__init__.py
 - dependencies
 - devDependencies
@@ -27,7 +27,7 @@
 - ContentBlueprint
 - [sessionId]/page.tsx
 - visual_selection.py
-- scene_renderers/router.py
+- test_acceptance_demos.py
 - diagram_engine/renderer.py
 - call_llm_with_retry
 - 05 — Backend Schema & API Contract — Shikshak AI
@@ -35,26 +35,26 @@
 - dashboard/page.tsx
 - new/page.tsx
 - useToast
-- lesson_planning.py
+- test_integration_phase1_2.py
 - learning_path.py
 - chunking_embedding.py
 - toast.tsx
 - shared.mjs
-- render_svg_frames_to_mp4
+- escape_xml
 - Supabase
 - build_curriculum
-- test_content_scriptwriter.py
+- llm.py
 - Changelog
-- test_science_visual_kits.py
+- circuit_diagram/renderer.py
 - AvatarProfile
 - Kit 2 — Circuit Symbol Kit (Electricity chapter)
-- visual_director.py
-- Shikshak AI — AI Teacher
+- groq_llm
+- 🎓 Shikshak AI — The AI Teacher That Actually Teaches
 - Changelog
 - Writing Guidelines for Postgres References
 - test_flow_cache_provider.py
 - ObjectRegistry
-- DiagramNode
+- test_science_visual_kits.py
 - instinct-cli.py
 - rdkit_renderer.py
 - cn
@@ -70,7 +70,7 @@
 - next.config.mjs
 - next-env.d.ts
 - postcss.config.mjs
-- RuntimeError
+- MuseTalkMacRenderer
 - pdf_structure_extraction.py
 - Screen specifications
 - 02 — Technical Requirements Document — Shikshak AI
@@ -80,12 +80,12 @@
 - validate_visual_payload
 - Section Definitions
 - 04 — UI/UX Design System — Shikshak AI
-- 00 — MASTER PROMPT — Shikshak AI (AI Teacher)
-- language.py
+- README.md
+- celery_app.py
 - VisualBrief
 - Supabase Postgres Best Practices
 - scripts
-- content_scriptwriter.py
+- test_content_scriptwriter.py
 - web/package.json
 - Security Checklist
 - rules/graphify.md
@@ -134,7 +134,7 @@
 - CinematicProvider
 - Test-Driven Development Workflow
 - test_parse_instinct.py
-- _make_project
+- _cmd_projects_merge
 - dependencies
 - video_compositing.py
 - test_crag_gate.py
@@ -143,8 +143,8 @@
 - SKILL: Diagram Animation Engine (Shikshak AI)
 - PRP Plan
 - Shikshak AI — Visual Architecture & System Guide
-- get_font
-- 01 — Product Requirements Document — Shikshak AI
+- text_measure.py
+- render_algebra_step_solve
 - Components
 - Agent Behavioral & Cognitive Standards
 - _load_instincts_from_dir
@@ -152,9 +152,9 @@
 - Cloud Security Checklist
 - PRP Implement
 - test_scene_breakdown_and_avatar.py
-- render_generic_explainer
+- render_svg_frames_to_mp4
 - Eval Harness Skill
-- TestWav2LipNeuralAvatar
+- visual_director.py
 - quality_gate.py
 - architect.md
 - scene_renderers/__init__.py
@@ -264,7 +264,7 @@
 - Web Patterns
 - Agent Introspection Debugging
 - Evaluation Criteria — Detailed Scoring Guide
-- _promote_specific
+- _make_project
 - Council - External Review
 - Delivery Gate — Mechanical Quality Gate for Claude Code
 - Examples
@@ -276,7 +276,7 @@
 - Plan Command
 - PRD Command
 - Process
-- .generate
+- detect_project
 - Build plan
 - docs-lookup.md
 - Critical Checks
@@ -309,7 +309,7 @@
 - repo-scan
 - How It Works
 - Security Bounty Hunter
-- generate_with_fallback
+- VideoGenerationRequest
 - Instinct Import Command
 - Package Manager Setup
 - Update Documentation
@@ -325,7 +325,7 @@
 - common-testing.md
 - Priority Order
 - _validate_import_url
-- _update_registry
+- RuntimeError
 - HIPAA Compliance
 - Plan Canvas
 - Phases
@@ -390,7 +390,7 @@
 - Plan Canvas Command
 - Projects Command
 - Promote Command
-- test_anti_slideshow_gate.py
+- start.sh
 - Common Issues to Catch
 - Classroom Whiteboard Visual Animation Invariant
 - Hook Integration for Session-Stop Self-Evaluation
@@ -423,18 +423,20 @@
 - hookify-configure.md
 - hookify-list.md
 - typescript
-- _check_for_forbidden_coordinates
+- VideoGenerationResult
 - parse_trace
-- celery_app.py
 - Path
-- VideoGenerationError
+- 🎨 Visual Modes: The Heart of Teaching
+- FlowCacheProvider
 - generate_lively_avatar_video
 - parse_pdf
 - _redact_home_paths
-- manim_provider.py
-- synthesize
-- flow_cache_provider.py
-- test_dual_output_narration_and_audio
+- .generate
+- 🚀 Quick Start
+- get_concept_graph_dict
+- test_optics_ray_diagram_renderer_creates_playable_mp4
+- ⚙️ Configuration & Customization
+- test_edge_tts_synthesis
 
 ## God Nodes (most connected - your core abstractions)
 1. `require_playable_video()` - 56 edges
@@ -449,8 +451,6 @@
 10. `run_session_pipeline()` - 27 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `test_avatar_presenter_modes()` --uses--> `AvatarPresenterMode`  [INFERRED]
-  apps/api/tests/test_musetalk_avatar.py → apps/api/models/avatar.py
 - `test_normalize_remote_url_empty_returns_empty()` --calls--> `_normalize_remote_url()`  [INFERRED]
   .agents/skills/continuous-learning-v2/scripts/test_parse_instinct.py → .agents/skills/continuous-learning-v2/scripts/instinct-cli.py
 - `test_normalize_remote_url_file_scheme_preserves_case()` --calls--> `_normalize_remote_url()`  [INFERRED]
@@ -459,19 +459,21 @@
   .agents/skills/continuous-learning-v2/scripts/test_parse_instinct.py → .agents/skills/continuous-learning-v2/scripts/instinct-cli.py
 - `test_normalize_remote_url_idempotent()` --calls--> `_normalize_remote_url()`  [INFERRED]
   .agents/skills/continuous-learning-v2/scripts/test_parse_instinct.py → .agents/skills/continuous-learning-v2/scripts/instinct-cli.py
+- `test_normalize_remote_url_network_is_lowercased()` --calls--> `_normalize_remote_url()`  [INFERRED]
+  .agents/skills/continuous-learning-v2/scripts/test_parse_instinct.py → .agents/skills/continuous-learning-v2/scripts/instinct-cli.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (429 total, 68 thin omitted)
+## Communities (431 total, 69 thin omitted)
 
 ### Community 0 - "models/__init__.py"
 Cohesion: 0.05
-Nodes (70): AgentError, AiIllustrationPayload, AlgebraStepSolvePayload, AnatomicalStructurePayload, AssessmentReportOut, BalancingExercisePayload, BioCellularProcessPayload, _cam() (+62 more)
+Nodes (68): AgentError, AiIllustrationPayload, AlgebraStepSolvePayload, AnatomicalStructurePayload, AssessmentReportOut, BalancingExercisePayload, BioCellularProcessPayload, _cam() (+60 more)
 
-### Community 1 - "llm.py"
-Cohesion: 0.07
-Nodes (46): assess_session(), AssessmentPlan, order_weak_areas_by_priority(), Any, BaseModel, task, Shikshak AI — Assessment Agent. Single responsibility: at the end of a session,…, Sort weak_areas descending by weakness_priority (highest remediation need… (+38 more)
+### Community 1 - "assessment.py"
+Cohesion: 0.05
+Nodes (60): evaluate_answer(), _grade(), Any, task, Shikshak AI — Answer Evaluation Agent. Single responsibility: given a…, Heuristic grader: case-insensitive match for MCQ (letter or value) and…, Grade a student's answer against the checkpoint's correct answer and update…, run() (+52 more)
 
 ### Community 3 - "dependencies"
 Cohesion: 0.12
@@ -486,20 +488,20 @@ Cohesion: 0.07
 Nodes (26): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+18 more)
 
 ### Community 6 - "factory.py"
-Cohesion: 0.15
-Nodes (19): ABC, Shikshak AI — video generation provider base. Every video provider (FlowCache,…, Every video provider implements this interface., Return False if the provider can't be used right now., VideoGenerationProvider, Shikshak AI — Cinematic AI Video Generation Provider (v3). Generates high-…, DiagramProvider, Deterministic, collision-free diagram animation engine. (+11 more)
+Cohesion: 0.14
+Nodes (21): ABC, Shikshak AI — video generation provider base. Every video provider (FlowCache,…, Every video provider implements this interface., Return False if the provider can't be used right now., VideoGenerationProvider, Shikshak AI — Cinematic AI Video Generation Provider (v3). Generates high-…, DiagramProvider, Deterministic, collision-free diagram animation engine. (+13 more)
 
 ### Community 7 - "supabase_persistence.py"
-Cohesion: 0.05
-Nodes (70): evaluate_answer(), _grade(), Any, task, Shikshak AI — Answer Evaluation Agent. Single responsibility: given a…, Heuristic grader: case-insensitive match for MCQ (letter or value) and…, Grade a student's answer against the checkpoint's correct answer and update…, run() (+62 more)
+Cohesion: 0.07
+Nodes (56): generate_deep_dive(), Any, task, Shikshak AI — Deep Dive Generation Agent. Single responsibility: when the user…, Generate a deep-dive segment for the given concept. Returns a segment dict with…, run(), Any, task (+48 more)
 
 ### Community 8 - "lib/types.ts"
 Cohesion: 0.16
 Nodes (17): ApiError, call(), AgentError, AssessmentReport, CreateSessionRequest, DocumentOut, LearnerProfile, LearningPath (+9 more)
 
 ### Community 9 - "ContentBlueprint"
-Cohesion: 0.11
-Nodes (31): _fallback(), animation_state(), AnimationState, keyframe_times(), ContentBlueprint, Deterministic node/edge animation timing synced to narration duration., audio_duration_ms(), compose_video() (+23 more)
+Cohesion: 0.13
+Nodes (28): animation_state(), AnimationState, keyframe_times(), ContentBlueprint, Deterministic node/edge animation timing synced to narration duration., audio_duration_ms(), compose_video(), ContentBlueprint (+20 more)
 
 ### Community 10 - "[sessionId]/page.tsx"
 Cohesion: 0.13
@@ -509,25 +511,25 @@ Nodes (14): DeleteSessionSection(), NOTE: The backend auto-creates a checkpoint 
 Cohesion: 0.16
 Nodes (17): dispatch_scene_render(), get_renderer_for_mode(), _infer_legacy_visual_type(), Any, Path, task, Shikshak AI — Visual Selection & Dispatch Router. Single responsibility: 1.…, Walk every segment and scene, verifying that visual modes are valid and ready… (+9 more)
 
-### Community 12 - "scene_renderers/router.py"
-Cohesion: 0.06
-Nodes (69): AnimationSceneSpec, _cam(), NarrativeMarker, BaseModel, Shikshak AI — Semantic Animation Intermediate Representation (IR). Non-…, A semantic camera instruction targeting educational regions or objects., Root specification passed from scientific adapters to Motion Canvas., snake_case -> camelCase (+61 more)
+### Community 12 - "test_acceptance_demos.py"
+Cohesion: 0.05
+Nodes (71): AnimationSceneSpec, _cam(), _check_for_forbidden_coordinates(), NarrativeMarker, Any, BaseModel, Shikshak AI — Semantic Animation Intermediate Representation (IR). Non-…, A semantic camera instruction targeting educational regions or objects. (+63 more)
 
 ### Community 13 - "diagram_engine/renderer.py"
 Cohesion: 0.13
-Nodes (38): assert_no_overlaps(), boxes_overlap(), LayoutResult, PositionedEdge, PositionedNode, Shared computed geometry; never part of LLM-facing schemas., layout_comparison(), DiagramSpec (+30 more)
+Nodes (37): assert_no_overlaps(), boxes_overlap(), LayoutResult, PositionedEdge, PositionedNode, Shared computed geometry; never part of LLM-facing schemas., layout_comparison(), DiagramSpec (+29 more)
 
 ### Community 14 - "call_llm_with_retry"
-Cohesion: 0.09
-Nodes (34): build_concept_graph(), ConceptGraph, ConceptNode, get_concept_graph_dict(), Any, BaseModel, Shikshak AI — Concept Graph Builder skill. Given a main topic and current…, Generate a concept map of related topics for the given concept. (+26 more)
+Cohesion: 0.10
+Nodes (32): LessonPlan, plan_lesson(), Any, BaseModel, task, Shikshak AI — Lesson Planning Agent (v3). Two modes: document mode: uses…, Return a validated lesson plan as a dict. When pdf_structure is provided…, run() (+24 more)
 
 ### Community 15 - "05 — Backend Schema & API Contract — Shikshak AI"
 Cohesion: 0.13
 Nodes (14): 05 — Backend Schema & API Contract — Shikshak AI, Assessment, Checkpoints, Database choice, Documents, Entity relationship overview, Full API contract, Learner profile (+6 more)
 
 ### Community 16 - "Core features"
-Cohesion: 0.18
-Nodes (11): 10. Persistent learner profile and learning paths, 1. Document-grounded learning (RAG), 2. Topic-based learning (no upload required), 3. Personalized depth and style, 4. Time-adaptive lesson structuring, 5. Multilingual teaching with mid-lesson switching, 6. Human-like AI teaching video, 7. Interactive questioning during the lesson (+3 more)
+Cohesion: 0.10
+Nodes (20): 01 — Product Requirements Document — Shikshak AI, 10. Persistent learner profile and learning paths, 1. Document-grounded learning (RAG), 2. Topic-based learning (no upload required), 3. Personalized depth and style, 4. Time-adaptive lesson structuring, 5. Multilingual teaching with mid-lesson switching, 6. Human-like AI teaching video (+12 more)
 
 ### Community 17 - "dashboard/page.tsx"
 Cohesion: 0.22
@@ -541,9 +543,9 @@ Nodes (8): NewSessionContent(), Tab, FileDropzone(), Select, TextInput, Document
 Cohesion: 0.24
 Nodes (11): ReportPage(), SettingsPage(), handleSignOut(), ReportBand(), ScoreCard(), Card(), CardBody(), CardProps (+3 more)
 
-### Community 20 - "lesson_planning.py"
-Cohesion: 0.10
-Nodes (23): LessonPlan, plan_lesson(), Any, BaseModel, task, Shikshak AI — Lesson Planning Agent (v3). Two modes: document mode: uses…, Return a validated lesson plan as a dict. When pdf_structure is provided…, run() (+15 more)
+### Community 20 - "test_integration_phase1_2.py"
+Cohesion: 0.12
+Nodes (20): _is_generic_placeholder(), _is_relevant_to_topic(), personalize(), Any, task, Shikshak AI — Personalization Agent. Single responsibility: given a lesson plan…, Return True if the concept string is a dummy or generic placeholder., Check if the weak concept has meaningful topical overlap with the lesson. (+12 more)
 
 ### Community 21 - "learning_path.py"
 Cohesion: 0.12
@@ -561,9 +563,9 @@ Nodes (10): inter, metadata, newsreader, BORDER_COLOR, ToastContext, ToastContex
 Cohesion: 0.05
 Nodes (55): contextDirPath, projects, resolved, resolved, cargo, claudeMd, gitConfig, goMod (+47 more)
 
-### Community 25 - "render_svg_frames_to_mp4"
-Cohesion: 0.05
-Nodes (57): escape_xml(), format_subscripts(), Shikshak AI — Scene Renderers Base Module. Provides standard 1280x720 SVG…, Escape XML characters for safe inclusion in SVG text elements., Helper to convert standard numbers in chemical formulas to unicode subscripts…, Ensure SVG XML string does not contain HTML-only entities that break expat XML…, Render a dynamic SVG frame generator to an H.264 MP4 video. svg_generator…, render_svg_frames_to_mp4() (+49 more)
+### Community 25 - "escape_xml"
+Cohesion: 0.06
+Nodes (44): escape_xml(), format_subscripts(), Shikshak AI — Scene Renderers Base Module. Provides standard 1280x720 SVG…, Escape XML characters for safe inclusion in SVG text elements., Helper to convert standard numbers in chemical formulas to unicode subscripts…, Shikshak AI — Biology Pack: Anatomical Structure Scene Renderer. Renders…, Any, Path (+36 more)
 
 ### Community 26 - "Supabase"
 Cohesion: 0.11
@@ -573,33 +575,33 @@ Nodes (15): Fix suggestion, Source, What happened, Skill Feedback, Steps, Core P
 Cohesion: 0.11
 Nodes (27): build_curriculum(), _build_overview(), _clean_heading(), _ensure_source_text(), _extract_related(), _infer_title(), _map_level(), _merge_to_target_count() (+19 more)
 
-### Community 28 - "test_content_scriptwriter.py"
-Cohesion: 0.13
-Nodes (20): explain_segment(), explain_segment_narration_only(), explain_segment_with_blueprint(), _format_chunks(), Any, task, Shikshak AI — Explanation Agent (v2). Uses the unified ContentBlueprint from…, Celery task — returns narration script only for backward compat. (+12 more)
+### Community 28 - "llm.py"
+Cohesion: 0.09
+Nodes (28): BaseModel, QueryRewrite, Shikshak AI — Knowledge Retrieval Agent. Single responsibility: given a…, Rewrite query using textbook-focused terminology to rescue partial matches., _reformulate_query(), get_content_llm(), get_llm(), get_request_counts() (+20 more)
 
 ### Community 29 - "Changelog"
 Cohesion: 0.12
 Nodes (16): [1.2.0](https://github.com/supabase/agent-skills/compare/v1.1.1...v1.2.0) (2026-06-02), [1.3.0](https://github.com/supabase/agent-skills/compare/v1.2.0...v1.3.0) (2026-06-05), [1.4.0](https://github.com/supabase/agent-skills/compare/v1.3.0...v1.4.0) (2026-07-10), [1.5.0](https://github.com/supabase/agent-skills/compare/supabase-postgres-best-practices-v1.4.0...supabase-postgres-best-practices-v1.5.0) (2026-07-30), [1.6.0](https://github.com/supabase/agent-skills/compare/supabase-postgres-best-practices-v1.5.0...supabase-postgres-best-practices-v1.6.0) (2026-07-30), Bug Fixes, Bug Fixes, Bug Fixes (+8 more)
 
-### Community 30 - "test_science_visual_kits.py"
+### Community 30 - "circuit_diagram/renderer.py"
 Cohesion: 0.14
-Nodes (32): current_flow_dash_offset(), current_flow_direction(), Deterministic current-flow timing for circuit SVG frames., Layouts encode wires clockwise/left-to-right, the convention used in render., Negative offset moves dashed current clockwise along each stored wire path., IEC-symbol circuit diagrams routed outside generative video providers., assert_no_symbol_overlap(), CircuitLayout (+24 more)
+Nodes (29): current_flow_dash_offset(), current_flow_direction(), Deterministic current-flow timing for circuit SVG frames., Layouts encode wires clockwise/left-to-right, the convention used in render., Negative offset moves dashed current clockwise along each stored wire path., IEC-symbol circuit diagrams routed outside generative video providers., assert_no_symbol_overlap(), CircuitLayout (+21 more)
 
 ### Community 31 - "AvatarProfile"
-Cohesion: 0.08
-Nodes (26): AvatarProfile, BaseModel, Path, Shikshak AI — Avatar Profiles & Presenter Modes Models. Defines: 1.…, Metadata and asset references for an educator avatar., Resolve absolute path on disk to the portrait asset., AvatarRenderer, ABC (+18 more)
+Cohesion: 0.10
+Nodes (19): AvatarProfile, BaseModel, Path, Shikshak AI — Avatar Profiles & Presenter Modes Models. Defines: 1.…, Metadata and asset references for an educator avatar., Resolve absolute path on disk to the portrait asset., AvatarRenderer, ABC (+11 more)
 
 ### Community 32 - "Kit 2 — Circuit Symbol Kit (Electricity chapter)"
 Cohesion: 0.07
 Nodes (26): Acceptance tests, Directory, Directory, Directory, Input contract, Input contract, Input contract, Kit 1 — Molecular Structure Kit (RDKit) (+18 more)
 
-### Community 33 - "visual_director.py"
-Cohesion: 0.22
-Nodes (22): _build_ai_illustration_payload(), _build_algebra_payload(), _build_anatomical_payload(), _build_balancing_payload(), _build_bio_cellular_payload(), _build_circuit_payload(), _build_equation_payload(), _build_kinetic_text_payload() (+14 more)
+### Community 33 - "groq_llm"
+Cohesion: 0.14
+Nodes (18): _extract_topic_from_prompt(), gemini_llm(), get_animation_llm(), get_fast_llm(), groq_llm(), Call Groq with a text prompt; return the raw text response. Automatically tries…, Return the fast-turnaround LLM callable (Groq, for interaction loop)., Return the LLM for animation/diagram planning. This handles ONLY: DiagramSpec… (+10 more)
 
-### Community 34 - "Shikshak AI — AI Teacher"
-Cohesion: 0.12
-Nodes (17): 1. Install dependencies, 2. Configure environment variables, 3. Set up the database, 4. Run the backend, 5. Run the frontend, Asset placeholders, Documentation, Known limitations (+9 more)
+### Community 34 - "🎓 Shikshak AI — The AI Teacher That Actually Teaches"
+Cohesion: 0.06
+Nodes (32): 🙏 Acknowledgments, 🏗️ Architecture: How It Works, Built For, 🤝 Contributing, Data Flow (Simplified), Deploy to Render.com (Free Tier), 🚀 Deployment, Development Workflow (+24 more)
 
 ### Community 35 - "Changelog"
 Cohesion: 0.12
@@ -610,24 +612,24 @@ Cohesion: 0.12
 Nodes (15): 1. Concrete Transformation Patterns, 2. Error-First Structure, 3. Quantified Impact, 4. Self-Contained Examples, 5. Semantic Naming, Code Example Standards, Comments, Impact Level Guidelines (+7 more)
 
 ### Community 37 - "test_flow_cache_provider.py"
-Cohesion: 0.11
-Nodes (22): Request contract for video generation providers., VideoGenerationRequest, FlowCacheProvider, Lookup-only provider that retrieves pre-cached Google Flow clips from Supabase., MockSupabaseClient, Unit and integration tests for Flow Cache video generation provider and…, Calling FlowCacheProvider.generate for an unregistered concept raises…, Calling FlowCacheProvider.generate for a registered concept returns a valid… (+14 more)
+Cohesion: 0.08
+Nodes (32): get_supabase_client(), main(), populate_video_cache(), Path, build_cache_prompt(), cached_or_compute(), hash_prompt(), make_prompt_hash() (+24 more)
 
 ### Community 38 - "ObjectRegistry"
 Cohesion: 0.08
 Nodes (27): BoundingBox, CameraState, CameraSystem, easeInOutCubic(), ObjectRegistry, ResolvedObjectVisual, BiologyScene, ChemistryScene (+19 more)
 
-### Community 39 - "DiagramNode"
-Cohesion: 0.21
-Nodes (16): Manifest of curated biological illustration vector assets., _asset_uri(), _callout_node_svg(), _generic_fallback(), Path, Biological illustration renderer combining BioIcons vector assets with cross-…, Render a biological illustration with satellite callouts to PNG bytes., Fallback to generic cross_section layout with plain labeled boxes. (+8 more)
+### Community 39 - "test_science_visual_kits.py"
+Cohesion: 0.17
+Nodes (20): Manifest of curated biological illustration vector assets., _asset_uri(), _callout_node_svg(), _generic_fallback(), Path, Biological illustration renderer combining BioIcons vector assets with cross-…, Render a biological illustration with satellite callouts to PNG bytes., Fallback to generic cross_section layout with plain labeled boxes. (+12 more)
 
 ### Community 40 - "instinct-cli.py"
-Cohesion: 0.07
-Nodes (49): _append_observations(), cmd_import(), cmd_promote(), cmd_status(), _collect_pending_dirs(), _collect_pending_instincts(), _confidence_bar(), detect_project() (+41 more)
+Cohesion: 0.08
+Nodes (47): _append_observations(), cmd_export(), cmd_import(), cmd_promote(), cmd_status(), _collect_pending_dirs(), _collect_pending_instincts(), _confidence_bar() (+39 more)
 
 ### Community 41 - "rdkit_renderer.py"
-Cohesion: 0.17
-Nodes (14): Resolve teacher-friendly bond labels to deterministic RDKit bond indices., resolve_bond_indices(), Locked NCERT compound-name to SMILES lookup; no runtime name resolution., Scientifically accurate, local RDKit molecular diagrams., RDKit 2D structure renderer using Diagram Engine style tokens., render_molecular_diagram(), _rgb(), MolecularDiagramRequest (+6 more)
+Cohesion: 0.16
+Nodes (16): Resolve teacher-friendly bond labels to deterministic RDKit bond indices., resolve_bond_indices(), Locked NCERT compound-name to SMILES lookup; no runtime name resolution., Scientifically accurate, local RDKit molecular diagrams., _generic_fallback(), RDKit 2D structure renderer using Diagram Engine style tokens., Plain labeled box fallback for unknown compounds, never a network call., render_molecular_diagram() (+8 more)
 
 ### Community 42 - "cn"
 Cohesion: 0.17
@@ -649,9 +651,9 @@ Nodes (37): _deterministic_reteach_fallback(), diagnose_and_reteach(), Any, Base
 Cohesion: 0.12
 Nodes (15): 1. Clone and install, 2. Configure environment variables, 3. Set up the database, 4. Run the backend, 5. Run the frontend, Documentation, Known limitations, License (+7 more)
 
-### Community 58 - "RuntimeError"
-Cohesion: 0.12
-Nodes (17): Path, Render talking-head video synced to narration audio. If MuseTalk service is…, Deterministic, audio-driven local avatar renderer. Generates synchronized…, render_local_animated_teacher(), Path, Shikshak AI — Native Wav2Lip Neural Lip Synchronization Renderer. Produces…, Neural lip-sync renderer powered by pre-trained Wav2Lip GAN., Load and cache Wav2Lip generator model. (+9 more)
+### Community 58 - "MuseTalkMacRenderer"
+Cohesion: 0.10
+Nodes (21): task, Shikshak AI — Avatar Rendering Agent. Single responsibility: take the…, Return the path to the rendered avatar video file., render(), run(), MuseTalkMacRenderer, Any, Path (+13 more)
 
 ### Community 59 - "pdf_structure_extraction.py"
 Cohesion: 0.12
@@ -670,8 +672,8 @@ Cohesion: 0.17
 Nodes (12): 06 — Implementation Plan — Shikshak AI, Common failure points to pre-empt, Deployment checklist, Phase 0 — Scaffolding (no AI logic yet), Phase 1 — Core teaching logic (text-only, no video), Phase 2 — Interactivity and assessment (still no video), Phase 3 — Learner memory and curriculum, Phase 4 — Video pipeline (+4 more)
 
 ### Community 63 - "synthesize_speech"
-Cohesion: 0.17
-Nodes (22): Shikshak AI — Voice Synthesis Agent. Single responsibility: take a final…, _get_kokoro(), _normalize_to_16k_mono_wav(), Path, Shikshak AI — Human-like TTS synthesis skill. Primary Engine: Kokoro-82M…, Normalize any audio file to 16,000 Hz, 1-channel mono PCM WAV., Use Kokoro-82M via ONNX runtime for ultra-fast human-grade voice., Synthesize speech via local Voicebox sidecar REST API (if running). (+14 more)
+Cohesion: 0.14
+Nodes (26): task, Shikshak AI — Voice Synthesis Agent. Single responsibility: take a final…, Return the path to the synthesised audio file., run(), synthesize(), _get_kokoro(), _normalize_to_16k_mono_wav(), Path (+18 more)
 
 ### Community 64 - "generate_educational_image"
 Cohesion: 0.13
@@ -689,17 +691,17 @@ Nodes (9): 1. Query Performance (query), 2. Connection Management (conn), 3. Sec
 Cohesion: 0.12
 Nodes (16): 04 — UI/UX Design System — Shikshak AI, Accessibility, Brand & accent, Breakpoints (unchanged from source), Colors, CSS variables (paste into `globals.css`), Design philosophy, Elevation (+8 more)
 
-### Community 68 - "00 — MASTER PROMPT — Shikshak AI (AI Teacher)"
+### Community 68 - "README.md"
 Cohesion: 0.14
 Nodes (8): 00 — MASTER PROMPT — Shikshak AI (AI Teacher), Agent operating rules, Build command sequence, Definition of Done, Documents in this suite, in reading order, Full folder structure, Project summary, Tech stack (one line each)
 
-### Community 69 - "language.py"
-Cohesion: 0.25
-Nodes (9): apply_language(), Any, task, Shikshak AI — Language Agent. Single responsibility: ensure the narration…, Translate narration scripts in the plan from `current_language` to…, run(), Shikshak AI — translation skill. Lightweight wrapper for language switching…, Translate `text` into `target_language` (BCP-47 like 'hi' or 'en'). Falls back… (+1 more)
+### Community 69 - "celery_app.py"
+Cohesion: 0.11
+Nodes (18): apply_language(), Any, task, Shikshak AI — Language Agent. Single responsibility: ensure the narration…, Translate narration scripts in the plan from `current_language` to…, run(), task, Shikshak AI — Celery application definition. Independent agents run via… (+10 more)
 
 ### Community 70 - "VisualBrief"
-Cohesion: 0.29
-Nodes (7): Legacy visual brief contract maintained for backwards compatibility., VisualBrief, _BrokenProvider, Path, A returned path is not success until its media stream is validated., test_factory_rejects_invalid_provider_output_before_fallback(), _WorkingProvider
+Cohesion: 0.23
+Nodes (9): Legacy visual brief contract maintained for backwards compatibility., VisualBrief, _BrokenProvider, Path, A returned path is not success until its media stream is validated., The planned visual should cover the spoken narration, not a fixed 15s., test_concept_animation_uses_audio_matched_duration(), test_factory_rejects_invalid_provider_output_before_fallback() (+1 more)
 
 ### Community 71 - "Supabase Postgres Best Practices"
 Cohesion: 0.33
@@ -709,9 +711,9 @@ Nodes (5): How to Use, References, Rule Categories by Priority, Supabase Postgre
 Cohesion: 0.33
 Nodes (6): scripts, build, dev, lint, start, test
 
-### Community 73 - "content_scriptwriter.py"
-Cohesion: 0.18
-Nodes (20): _build_diagram_from_scenes(), ContentBlueprint, DiagramSpecBlueprint, _extract_narration_from_scenes(), _fallback_blueprint(), generate_content_blueprint(), BaseModel, Shikshak AI — Content Scriptwriter Agent (v3). Generates a **single unified… (+12 more)
+### Community 73 - "test_content_scriptwriter.py"
+Cohesion: 0.08
+Nodes (42): _build_diagram_from_scenes(), ContentBlueprint, DiagramSpecBlueprint, _extract_narration_from_scenes(), _fallback_blueprint(), generate_content_blueprint(), BaseModel, Shikshak AI — Content Scriptwriter Agent (v3). Generates a **single unified… (+34 more)
 
 ### Community 74 - "web/package.json"
 Cohesion: 0.40
@@ -726,16 +728,16 @@ Cohesion: 0.04
 Nodes (47): Anti-Patterns, Branch Cleanup, Branch Management, Branching Strategies, Changelog Generation, Code Review Checklist, Commit Message Template, Commit Messages (+39 more)
 
 ### Community 116 - "universal_diagram.py"
-Cohesion: 0.07
-Nodes (50): _extract_topic_from_prompt(), gemini_llm(), get_animation_llm(), get_fast_llm(), groq_llm(), Call Groq with a text prompt; return the raw text response. Automatically tries…, Return the fast-turnaround LLM callable (Groq, for interaction loop)., Return the LLM for animation/diagram planning. This handles ONLY: DiagramSpec… (+42 more)
+Cohesion: 0.12
+Nodes (30): DiagramEdge, DiagramNode, DiagramSpec, _ease_in_out(), _edge_svg(), _empty_frame_svg(), _fallback_spec(), _layout_positions() (+22 more)
 
 ### Community 117 - "require_playable_video"
-Cohesion: 0.09
-Nodes (43): AvatarPresenterMode, Pedagogical teacher visibility and layout modes., Any, Path, Shikshak AI — AI Educational Illustration Scene Renderer. Renders high-fidelity…, Render an AI illustration scene with smooth kinetic camera push-in and clean…, render_ai_illustration(), MediaInfo (+35 more)
+Cohesion: 0.08
+Nodes (44): AvatarPresenterMode, Pedagogical teacher visibility and layout modes., Shikshak AI — Lively Audio-Driven Educator Avatar Generator. Provides…, MediaInfo, MediaValidationError, probe_media(), Path, Small, strict media probes used at each video-pipeline boundary. The pipeline… (+36 more)
 
 ### Community 118 - "Wav2Lip"
-Cohesion: 0.17
-Nodes (8): Shikshak AI — Wav2Lip Neural Lip Synchronization Engine., Conv2d, Conv2dTranspose, nonorm_Conv2d, Shikshak AI — Wav2Lip Generator Network Architecture. Faithful PyTorch…, Wav2Lip Lip-Sync Generator Network., Wav2Lip, Tensor
+Cohesion: 0.09
+Nodes (16): Shikshak AI — Wav2Lip Neural Lip Synchronization Engine., Conv2d, Conv2dTranspose, nonorm_Conv2d, Shikshak AI — Wav2Lip Generator Network Architecture. Faithful PyTorch…, Wav2Lip Lip-Sync Generator Network., Wav2Lip, Path (+8 more)
 
 ### Community 119 - "CinematicProvider"
 Cohesion: 0.23
@@ -746,32 +748,32 @@ Cohesion: 0.04
 Nodes (47): 1. Tests BEFORE Code, 2. Coverage Requirements, 3. Test Types, 4. Git Checkpoints, API Integration Test Pattern, Best Practices, Bun Native Test Pattern (`bun:test`), CI/CD Integration (+39 more)
 
 ### Community 121 - "test_parse_instinct.py"
-Cohesion: 0.07
-Nodes (45): cmd_prune(), _normalize_remote_url(), parse_instinct_file(), Validate and resolve a file path, guarding against path traversal. Raises…, Delete pending instincts older than the TTL threshold., Parse YAML-like instinct file format. Each instinct is delimited by a pair of…, _validate_file_path(), _pending_item() (+37 more)
+Cohesion: 0.05
+Nodes (56): cmd_prune(), _normalize_remote_url(), parse_instinct_file(), Validate and resolve a file path, guarding against path traversal. Raises…, Delete pending instincts older than the TTL threshold., Update the projects.json registry. Uses file locking (where available) to…, Parse YAML-like instinct file format. Each instinct is delimited by a pair of…, _update_registry() (+48 more)
 
-### Community 122 - "_make_project"
-Cohesion: 0.06
-Nodes (45): cmd_projects(), _cmd_projects_delete(), _cmd_projects_gc(), _cmd_projects_merge(), load_registry(), _project_counts(), List or maintain known projects and their instinct counts., Load the projects registry. (+37 more)
+### Community 122 - "_cmd_projects_merge"
+Cohesion: 0.07
+Nodes (35): cmd_projects(), _cmd_projects_delete(), _cmd_projects_merge(), load_registry(), _project_counts(), List or maintain known projects and their instinct counts., Serialize registry read-modify-write across concurrent sessions. Acquires the…, Load the projects registry. (+27 more)
 
 ### Community 123 - "dependencies"
 Cohesion: 0.05
 Nodes (41): @motion-canvas/2d, @motion-canvas/core, @napi-rs/canvas, dependencies, lucide-react, @motion-canvas/2d, @motion-canvas/core, @napi-rs/canvas (+33 more)
 
 ### Community 124 - "video_compositing.py"
-Cohesion: 0.16
-Nodes (17): composite_lesson(), composite_lesson_task(), composite_scenes(), composite_scenes_task(), composite_segment(), composite_segment_task(), task, Shikshak AI — Video Compositing Agent. Single responsibility: combine avatar +… (+9 more)
+Cohesion: 0.17
+Nodes (14): composite_lesson(), composite_lesson_task(), composite_scenes(), composite_scenes_task(), composite_segment(), composite_segment_task(), task, Shikshak AI — Video Compositing Agent. Single responsibility: combine avatar +… (+6 more)
 
 ### Community 125 - "test_crag_gate.py"
 Cohesion: 0.08
 Nodes (36): Any, task, Return top_k chunks for the query, filtered by CRAG relevance gate., Subclass of list that carries CRAG gating metadata while behaving as a plain…, Compute combined similarity + lexical overlap score for each chunk., Execute CRAG-gated retrieval returning a structured CragResult., RetrievalChunkList, retrieve() (+28 more)
 
 ### Community 126 - "diagram_provider.py"
-Cohesion: 0.17
-Nodes (14): center(), _edge_svg(), _brief_to_blueprint(), _detect_bio_structure(), _detect_compound(), _extract_nodes_from_brief(), ContentBlueprint, DiagramNode (+6 more)
+Cohesion: 0.16
+Nodes (17): center(), _edge_svg(), list_scenes(), Return all scenes for a segment ordered by scene_order ascending., _brief_to_blueprint(), _detect_bio_structure(), _detect_compound(), _extract_nodes_from_brief() (+9 more)
 
 ### Community 127 - "main.py"
-Cohesion: 0.06
-Nodes (46): api_route, _check_render_rate(), _check_session_rate(), create_learning_path(), delete_session(), _format_video_url(), get_document(), get_learner_profile() (+38 more)
+Cohesion: 0.07
+Nodes (43): api_route, _check_render_rate(), _check_session_rate(), create_learning_path(), _format_video_url(), get_document(), get_learner_profile(), get_learning_path() (+35 more)
 
 ### Community 128 - "SKILL: Diagram Animation Engine (Shikshak AI)"
 Cohesion: 0.18
@@ -785,13 +787,13 @@ Nodes (37): Ambiguity Gate, Codebase Analysis (5 Traces), Codebase Search (8 Cat
 Cohesion: 0.12
 Nodes (16): 10. Summary of Architectural Guarantees, 1. Executive Mental Model (The 30-Second Overview), 2. Complete End-to-End System Architecture, 3. The End-to-End Life of a Lesson (Step-by-Step), 4. Multi-Agent Directory & Responsibilities Matrix, 5. Scene-First Video Generation & Rendering Architecture, 6. The Dual-LLM Routing Shield, 7. The Socratic Feedback & Remediation Loop (+8 more)
 
-### Community 131 - "get_font"
+### Community 131 - "text_measure.py"
 Cohesion: 0.33
-Nodes (7): get_font(), measure_text(), MeasuredText, Use a stable system font when Inter is not installed on the renderer., _wrap(), FreeTypeFont, ImageFont
+Nodes (8): get_font(), measure_text(), MeasuredText, Measured text geometry used by every deterministic diagram layout., Use a stable system font when Inter is not installed on the renderer., _wrap(), FreeTypeFont, ImageFont
 
-### Community 132 - "01 — Product Requirements Document — Shikshak AI"
-Cohesion: 0.22
-Nodes (9): 01 — Product Requirements Document — Shikshak AI, App name & tagline, Elevator pitch, Nice-to-have features (v2), Non-goals, Problem statement, Success metrics, Target personas (+1 more)
+### Community 132 - "render_algebra_step_solve"
+Cohesion: 0.10
+Nodes (18): Any, Path, Shikshak AI — Mathematics Pack: Algebra Step Solve Scene Renderer. Renders…, Render an algebra_step_solve scene to MP4., render_algebra_step_solve(), Shikshak AI — Mathematics Scene Renderers Pack., Any, Path (+10 more)
 
 ### Community 133 - "Components"
 Cohesion: 0.25
@@ -802,12 +804,12 @@ Cohesion: 0.25
 Nodes (7): 0. ECC Prompt Interception Gateway (Mandatory Middle Layer), 1. Operating Mindset & Epistemic Rigor, 2. Communication & Output Discipline, 3. Precision Code Operations & Execution, 4. Context Integration & Memory Discipline, 5. Security & Safety Integrity, Agent Behavioral & Cognitive Standards
 
 ### Community 135 - "_load_instincts_from_dir"
-Cohesion: 0.06
-Nodes (35): cmd_export(), load_all_instincts(), _load_instincts_from_dir(), load_project_only_instincts(), Export instincts to file., Quote a string for safe YAML frontmatter serialization. Uses double quotes and…, Load instincts from a single directory., Load all instincts: project-scoped + global. Project-scoped instincts take… (+27 more)
+Cohesion: 0.09
+Nodes (24): _find_cross_project_instincts(), _load_instincts_from_dir(), Find instincts that appear in multiple projects (promotion candidates). Returns…, Show instincts that could be promoted from project to global., Load instincts from a single directory., _show_promotion_candidates(), Loaded instincts should have _source_file, _source_type, _scope_label., If an instinct has no 'scope' in frontmatter, it should default to scope_label. (+16 more)
 
 ### Community 136 - "orchestrator/router.py"
-Cohesion: 0.09
-Nodes (33): generate_deep_dive(), Any, task, Shikshak AI — Deep Dive Generation Agent. Single responsibility: when the user…, Generate a deep-dive segment for the given concept. Returns a segment dict with…, run(), create_session(), Create a new teaching session. Triggers the Orchestrator → agent DAG. (+25 more)
+Cohesion: 0.18
+Nodes (16): build_execution_plan(), Shikshak AI — Execution Plan builder. Given a CreateSessionRequest, returns the…, One step of the execution DAG., Return the ordered list of Steps for the orchestrator to dispatch. The DAG (per…, Step, Shikshak AI — orchestrator package., _log_step(), _persist_segments() (+8 more)
 
 ### Community 137 - "Cloud Security Checklist"
 Cohesion: 0.06
@@ -819,31 +821,31 @@ Nodes (31): Archive Plan, Branch Decision, Build Fails, Create Implementation Re
 
 ### Community 139 - "test_scene_breakdown_and_avatar.py"
 Cohesion: 0.09
-Nodes (33): _fallback_scenes(), plan_scenes_for_segment(), Any, BaseModel, task, Shikshak AI — Scene Planning Agent (Universal Multi-Subject). Single…, Generate 3-5 typed scenes for a single lesson segment across any subject., Validate each scene against its visual_mode payload schema and normalize. (+25 more)
+Nodes (31): _fallback_scenes(), plan_scenes_for_segment(), Any, BaseModel, task, Generate 3-5 typed scenes for a single lesson segment across any subject., Validate each scene against its visual_mode payload schema and normalize., Deterministic, dynamic scene synthesis derived strictly from the narration and… (+23 more)
 
-### Community 140 - "render_generic_explainer"
-Cohesion: 0.13
-Nodes (26): Any, Path, Render an illustrated, whiteboard-classroom explainer scene to MP4., render_generic_explainer(), Any, Resolve the most accurate vector icon for a concept or narration string., Render an icon centered at (cx, cy) with standard SVG scaling., render_icon_element() (+18 more)
+### Community 140 - "render_svg_frames_to_mp4"
+Cohesion: 0.12
+Nodes (31): Ensure SVG XML string does not contain HTML-only entities that break expat XML…, Render a dynamic SVG frame generator to an H.264 MP4 video. svg_generator…, render_svg_frames_to_mp4(), sanitize_svg_entities(), Any, Path, Shikshak AI — Classroom Whiteboard Generic Explainer Scene Renderer. Renders…, Render an illustrated, whiteboard-classroom explainer scene to MP4. (+23 more)
 
 ### Community 141 - "Eval Harness Skill"
 Cohesion: 0.06
 Nodes (30): 1. Code-Based Grader, 1. Define (Before Coding), 2. Implement, 2. Model-Based Grader, 3. Evaluate, 3. Human Grader, 4. Report, Best Practices (+22 more)
 
-### Community 142 - "TestWav2LipNeuralAvatar"
-Cohesion: 0.19
-Nodes (8): Path, Acceptance test suite for Wav2Lip educator video generation., Verify Wav2Lip PyTorch model executes with correct tensor dimensions., Verify pre-trained weights load without key mismatches., Verify 80-channel mel chunk extraction from teacher audio., Verify end-to-end video synthesis using Wav2LipRenderer., Verify high-level render_lip_sync dispatch uses Wav2Lip by default., TestWav2LipNeuralAvatar
+### Community 142 - "visual_director.py"
+Cohesion: 0.22
+Nodes (22): _build_ai_illustration_payload(), _build_algebra_payload(), _build_anatomical_payload(), _build_balancing_payload(), _build_bio_cellular_payload(), _build_circuit_payload(), _build_equation_payload(), _build_kinetic_text_payload() (+14 more)
 
 ### Community 143 - "quality_gate.py"
-Cohesion: 0.13
-Nodes (23): audit_cinematic_video(), audit_scene(), audit_scenes_for_segment(), compute_visual_necessity_score(), Any, BaseModel, Path, QualityIssue (+15 more)
+Cohesion: 0.10
+Nodes (28): audit_cinematic_video(), audit_scene(), audit_scenes_for_segment(), compute_visual_necessity_score(), Any, BaseModel, Path, QualityIssue (+20 more)
 
 ### Community 144 - "architect.md"
 Cohesion: 0.07
 Nodes (28): 1. Current State Analysis, 1. Modularity & Separation of Concerns, 2. Requirements Gathering, 2. Scalability, 3. Design Proposal, 3. Maintainability, 4. Security, 4. Trade-Off Analysis (+20 more)
 
 ### Community 145 - "scene_renderers/__init__.py"
-Cohesion: 0.05
-Nodes (45): Any, Path, Render an anatomical_structure scene to MP4., render_anatomical_structure(), Any, Path, Render a bio_cellular_process scene to MP4., render_bio_cellular_process() (+37 more)
+Cohesion: 0.06
+Nodes (38): Any, Path, Render an anatomical_structure scene to MP4., render_anatomical_structure(), Any, Path, Shikshak AI — Biology Pack: Cellular Process Scene Renderer. Renders dynamic,…, Render a bio_cellular_process scene to MP4. (+30 more)
 
 ### Community 146 - "evaluate.py"
 Cohesion: 0.13
@@ -878,8 +880,8 @@ Cohesion: 0.08
 Nodes (23): 1. Discover, 2. Infer the reader, 3. Read and verify anchors, 4. Write the `.tour`, 5. Validate, Anti-Patterns, Best Practices, Code Tour (+15 more)
 
 ### Community 154 - "cmd_evolve"
-Cohesion: 0.10
-Nodes (24): _assign_unique_slugs(), _cluster_by_keyword_overlap(), cmd_evolve(), _evolved_agent_name(), _evolved_command_name(), _evolved_description(), _evolved_skill_name(), _generate_evolved() (+16 more)
+Cohesion: 0.11
+Nodes (22): _assign_unique_slugs(), _cluster_by_keyword_overlap(), cmd_evolve(), _evolved_agent_name(), _evolved_command_name(), _evolved_description(), _evolved_skill_name(), _generate_evolved() (+14 more)
 
 ### Community 155 - "Continuous Learning v2.1 - Instinct"
 Cohesion: 0.08
@@ -942,8 +944,8 @@ Cohesion: 0.11
 Nodes (19): Composition over Inheritance, Compound Components, Container / Presentational Split, Controlled, Data Fetching, Form Libraries, Forms, Lists and Keys (+11 more)
 
 ### Community 170 - "_promote_auto"
-Cohesion: 0.11
-Nodes (19): _find_cross_project_instincts(), _promote_auto(), Find instincts that appear in multiple projects (promotion candidates). Returns…, Auto-promote instincts found in multiple projects., Validate instinct IDs before using them in filenames., _validate_instinct_id(), Auto-promote with no cross-project instincts should say so., Dry run should list candidates but not write files. (+11 more)
+Cohesion: 0.17
+Nodes (12): _promote_auto(), Auto-promote instincts found in multiple projects., Validate instinct IDs before using them in filenames., _validate_instinct_id(), Auto-promote with no cross-project instincts should say so., Dry run should list candidates but not write files., Auto-promote with force should write global instinct file., test_promote_auto_dry_run() (+4 more)
 
 ### Community 171 - "GateGuard — Fact-Forcing Pre-Action Gate"
 Cohesion: 0.11
@@ -1269,9 +1271,9 @@ Nodes (11): Agent Introspection Debugging, Four-Phase Loop, Integration with ECC
 Cohesion: 0.17
 Nodes (11): Accuracy, Actionability, Clarity, Completeness, Conciseness, Edge Cases, Evaluation Criteria — Detailed Scoring Guide, When the task is inherently simple (+3 more)
 
-### Community 252 - "_promote_specific"
-Cohesion: 0.17
-Nodes (12): _promote_specific(), Promote a specific instinct by ID from current project to global., dry_run returns 0, prints [DRY RUN], and writes no global file., Promoting nonexistent instinct should fail., Path-like instinct IDs should be rejected before file writes., Promoting an instinct that already exists globally should fail., Promote a project instinct to global with --force., test_promote_specific_already_global() (+4 more)
+### Community 252 - "_make_project"
+Cohesion: 0.07
+Nodes (30): _cmd_projects_gc(), _make_project(), dry_run returns 0, prints [DRY RUN], and writes no global file., Create project directory structure and return a project dict., Should load from both project and global directories., When project and global have same ID, project wins., load_project_only_instincts should NOT include global instincts., No instincts at all should return empty list. (+22 more)
 
 ### Community 253 - "Council - External Review"
 Cohesion: 0.17
@@ -1317,9 +1319,9 @@ Nodes (11): Integration, Phase 1 — FRAME, Phase 2 — GROUND, Phase 3 — DECI
 Cohesion: 0.17
 Nodes (11): Example Output, Notes, Process, Save Session Command, Session File Format, Step 1: Gather context, Step 2: Create the sessions folder if it doesn't exist, Step 3: Write the session file (+3 more)
 
-### Community 264 - ".generate"
-Cohesion: 0.18
-Nodes (5): Render or retrieve a video for the request and return a VideoGenerationResult., Result returned by video generation providers., VideoGenerationResult, Path, Path
+### Community 264 - "detect_project"
+Cohesion: 0.14
+Nodes (14): detect_project(), _git_repo_root(), _main_worktree_root(), Return the main worktree root when project_root is a linked worktree., Detect current project context. Returns dict with id, name, root, project_dir., _strip_remote_credentials(), When no git and no env var, should return global project., CLAUDE_PROJECT_DIR env var should be used as project root. (+6 more)
 
 ### Community 265 - "Build plan"
 Cohesion: 0.17
@@ -1449,9 +1451,9 @@ Nodes (9): How It Works, Implementation, Integration, Mode 1: Careful Mode, Mode
 Cohesion: 0.20
 Nodes (9): Example Triage Loop, How It Works, In-Scope Patterns, Quality Gate, Report Structure, Security Bounty Hunter, Skip These, When to Use (+1 more)
 
-### Community 297 - "generate_with_fallback"
+### Community 297 - "VideoGenerationRequest"
 Cohesion: 0.21
-Nodes (11): animate_segment(), Any, task, Shikshak AI — Concept Animation Agent. Single responsibility: take a segment's…, Return {video_path, video_url, provider, cache_hit, video_cache_id}. Args:…, run(), generate_with_fallback(), Path (+3 more)
+Nodes (13): animate_segment(), Any, task, Shikshak AI — Concept Animation Agent. Single responsibility: take a segment's…, Return {video_path, video_url, provider, cache_hit, video_cache_id}. Args:…, run(), Request contract for video generation providers., VideoGenerationRequest (+5 more)
 
 ### Community 298 - "Instinct Import Command"
 Cohesion: 0.20
@@ -1510,12 +1512,12 @@ Cohesion: 0.22
 Nodes (9): 1. Visual Regression, 2. Accessibility, 3. Performance, 4. Cross-Browser, 5. Responsive, E2E Shape, Priority Order, Unit Tests (+1 more)
 
 ### Community 312 - "_validate_import_url"
-Cohesion: 0.22
-Nodes (9): _fetch_import_url(), Validate remote instinct imports before opening a network connection., Fetch a validated remote instinct file with bounded size and timeout., _validate_import_url(), Remote imports should not downgrade to plaintext HTTP., Remote imports should not resolve to private or loopback addresses., test_validate_import_url_allows_public_https(), test_validate_import_url_rejects_http() (+1 more)
+Cohesion: 0.29
+Nodes (7): Validate remote instinct imports before opening a network connection., _validate_import_url(), Remote imports should not downgrade to plaintext HTTP., Remote imports should not resolve to private or loopback addresses., test_validate_import_url_allows_public_https(), test_validate_import_url_rejects_http(), test_validate_import_url_rejects_private_hosts()
 
-### Community 313 - "_update_registry"
-Cohesion: 0.22
-Nodes (9): Serialize registry read-modify-write across concurrent sessions. Acquires the…, Update the projects.json registry. Uses file locking (where available) to…, _registry_lock(), _update_registry(), test_update_registry_atomic_replaces_file(), test_update_registry_heals_malformed_entry(), test_update_registry_heals_non_dict_registry(), test_update_registry_matches_shell_schema() (+1 more)
+### Community 313 - "RuntimeError"
+Cohesion: 0.19
+Nodes (10): Path, Neural lip-sync renderer powered by pre-trained Wav2Lip GAN., Load and cache Wav2Lip generator model., Render synchronized neural lip-talking educator video., Wav2LipRenderer, Any, Path, Render an AI illustration scene with smooth kinetic camera push-in and clean… (+2 more)
 
 ### Community 314 - "HIPAA Compliance"
 Cohesion: 0.22
@@ -1606,8 +1608,8 @@ Cohesion: 0.25
 Nodes (7): Edge Cases, Fail-Closed Contract, Mode Selection, /orch-review, Phase 1 — GATHER, Phase 2 — INVOKE, Phase 3 — REPORT
 
 ### Community 336 - "content_ingestion.py"
-Cohesion: 0.11
-Nodes (24): ingest_document(), _parse(), Any, task, Shikshak AI — Content Ingestion Agent. Single responsibility: take an uploaded…, Synchronous entry point (also called from the FastAPI request handler when the…, Celery task wrapper for the Content Ingestion Agent., run() (+16 more)
+Cohesion: 0.07
+Nodes (31): ingest_document(), _parse(), Any, task, Shikshak AI — Content Ingestion Agent. Single responsibility: take an uploaded…, Synchronous entry point (also called from the FastAPI request handler when the…, Celery task wrapper for the Content Ingestion Agent., run() (+23 more)
 
 ### Community 337 - "audio.py"
 Cohesion: 0.35
@@ -1726,8 +1728,8 @@ Cohesion: 0.33
 Nodes (5): Implementation, Panels, Skill Health Dashboard, Usage, What to Do
 
 ### Community 366 - "_verify_wav_properties"
-Cohesion: 0.25
-Nodes (8): Verify strictly the pipeline invariant: 16,000 Hz, 1-channel mono PCM WAV., Test primary speech synthesis for English narration., Test speech synthesis for Hindi narration (MadhurNeural educator voice)., Verify Edge-TTS synthesis explicitly with modern educator voices., test_edge_tts_educator_voices(), test_synthesize_speech_english_default(), test_synthesize_speech_hindi_conversational(), _verify_wav_properties()
+Cohesion: 0.20
+Nodes (10): Verify strictly the pipeline invariant: 16,000 Hz, 1-channel mono PCM WAV., Test primary speech synthesis for English narration., Test speech synthesis for Hindi narration (MadhurNeural educator voice)., Verify that the Voice Synthesis Agent produces valid 16kHz mono audio., Verify Edge-TTS synthesis explicitly with modern educator voices., test_edge_tts_educator_voices(), test_synthesize_speech_english_default(), test_synthesize_speech_hindi_conversational() (+2 more)
 
 ### Community 367 - "test_scene_choreography.py"
 Cohesion: 0.25
@@ -1772,10 +1774,6 @@ Nodes (4): Implementation, Projects Command, Usage, What to Do
 ### Community 377 - "Promote Command"
 Cohesion: 0.40
 Nodes (4): Implementation, Promote Command, Usage, What to Do
-
-### Community 378 - "test_anti_slideshow_gate.py"
-Cohesion: 0.20
-Nodes (10): Path, Tests for Anti-Slideshow Quality Gate & Lively Educational Animations., Verify that a PowerPoint-style bulleted formula scene is intercepted and…, Verify that a static bulleted lens formula slide is converted into an animated…, Verify that the spherical mirror animation produces a valid playable video., Verify that the optics ray diagram produces a valid playable video., test_anti_slideshow_gate_intercepts_bulleted_formulas(), test_anti_slideshow_gate_intercepts_lens_formula_slide() (+2 more)
 
 ### Community 379 - "Common Issues to Catch"
 Cohesion: 0.50
@@ -1829,29 +1827,29 @@ Nodes (3): Confidence Rule, Steps, Usage
 Cohesion: 0.43
 Nodes (4): _ChemSpecies, Any, One chemical species (reactant or product) in a reaction scene., field_validator
 
-### Community 417 - "_check_for_forbidden_coordinates"
-Cohesion: 0.62
-Nodes (3): _check_for_forbidden_coordinates(), Any, model_validator
+### Community 417 - "VideoGenerationResult"
+Cohesion: 0.22
+Nodes (4): Render or retrieve a video for the request and return a VideoGenerationResult., Result returned by video generation providers., VideoGenerationResult, Path
 
 ### Community 418 - "parse_trace"
 Cohesion: 0.33
 Nodes (4): parse_trace(), Parse a JSONL observation trace file into sorted events., Path, TestParseTrace
 
-### Community 419 - "celery_app.py"
-Cohesion: 0.09
-Nodes (22): task, Shikshak AI — Avatar Rendering Agent. Single responsibility: take the…, Return the path to the rendered avatar video file., render(), run(), _find_unsupported_claims(), guard(), Any (+14 more)
-
-### Community 420 - "Path"
+### Community 419 - "Path"
 Cohesion: 0.25
 Nodes (4): Path, Return the path to the cached image if it exists and is non-empty., Store image bytes into cache and return path., Copy an existing image file into the cache.
 
-### Community 421 - "VideoGenerationError"
-Cohesion: 0.29
-Nodes (4): Exception, Typed error raised when a video generation provider fails., VideoGenerationError, Any
+### Community 420 - "🎨 Visual Modes: The Heart of Teaching"
+Cohesion: 0.25
+Nodes (8): 🧬 Biology Pack, 🧪 Chemistry Pack, 🎨 Generative AI Pack (Optional), 📐 Mathematics Pack, 🎬 Motion Graphics Pack, ⚡ Physics Pack, 🌐 Universal Fallback, 🎨 Visual Modes: The Heart of Teaching
+
+### Community 421 - "FlowCacheProvider"
+Cohesion: 0.22
+Nodes (6): Exception, Typed error raised when a video generation provider fails., VideoGenerationError, FlowCacheProvider, Any, Lookup-only provider that retrieves pre-cached Google Flow clips from Supabase.
 
 ### Community 422 - "generate_lively_avatar_video"
-Cohesion: 0.31
-Nodes (8): _extract_audio_envelope_and_features(), generate_lively_avatar_video(), ndarray, Path, Shikshak AI — Lively Audio-Driven Educator Avatar Generator. Provides…, Convert audio to 16kHz mono WAV via ffmpeg and compute normalized per-frame RMS…, Generate synchronized talking educator video with natural mouth movements and…, test_lively_talking_avatar_audio_sync()
+Cohesion: 0.38
+Nodes (7): _extract_audio_envelope_and_features(), generate_lively_avatar_video(), ndarray, Path, Convert audio to 16kHz mono WAV via ffmpeg and compute normalized per-frame RMS…, Generate synchronized talking educator video with natural mouth movements and…, test_lively_talking_avatar_audio_sync()
 
 ### Community 423 - "parse_pdf"
 Cohesion: 0.29
@@ -1861,37 +1859,45 @@ Nodes (7): parse_pdf(), Any, Path, Shikshak AI — PDF parsing skill. Wraps PyMu
 Cohesion: 0.33
 Nodes (6): Replace the operator's home directory with a portable placeholder. Observations…, Return a copy with home paths redacted from string keys and leaves. Redacted…, Redact structured report data before encoding and truncating it., _redact_home_path(), _redact_home_paths(), _serialize_report_value()
 
-### Community 425 - "manim_provider.py"
-Cohesion: 0.29
-Nodes (8): _build_scene_script(), _find_rendered_video(), Path, Shikshak AI — Manim video generation provider (default). Deterministic, zero-…, Last-resort: tiny valid mp4 placeholder., Generate the source code for a Manim Scene describing this concept., Render a Manim scene for the given concept., _write_placeholder_video()
+### Community 425 - ".generate"
+Cohesion: 0.32
+Nodes (7): _build_scene_script(), _find_rendered_video(), Path, Last-resort: tiny valid mp4 placeholder., Generate the source code for a Manim Scene describing this concept., Render a Manim scene for the given concept., _write_placeholder_video()
 
-### Community 426 - "synthesize"
+### Community 426 - "🚀 Quick Start"
 Cohesion: 0.33
-Nodes (6): task, Return the path to the synthesised audio file., run(), synthesize(), Verify that the Voice Synthesis Agent produces valid 16kHz mono audio., test_voice_synthesis_agent_delegation()
+Nodes (6): 1️⃣ Clone and Install, 2️⃣ Configure Environment, 3️⃣ Setup Database, 4️⃣ Run Development Servers, Prerequisites, 🚀 Quick Start
 
-### Community 427 - "flow_cache_provider.py"
-Cohesion: 0.13
-Nodes (17): get_supabase_client(), main(), populate_video_cache(), Path, build_cache_prompt(), cached_or_compute(), hash_prompt(), make_prompt_hash() (+9 more)
+### Community 427 - "get_concept_graph_dict"
+Cohesion: 0.40
+Nodes (5): get_concept_graph_dict(), Any, Convenience wrapper returning a plain dict list for API responses., Verify concept graph generates related concepts., test_concept_graph()
+
+### Community 428 - "test_optics_ray_diagram_renderer_creates_playable_mp4"
+Cohesion: 0.40
+Nodes (5): Path, Verify that the spherical mirror animation produces a valid playable video., Verify that the optics ray diagram produces a valid playable video., test_optics_ray_diagram_renderer_creates_playable_mp4(), test_spherical_mirror_renderer_creates_playable_mp4()
+
+### Community 429 - "⚙️ Configuration & Customization"
+Cohesion: 0.40
+Nodes (5): Avatar Provider Options, ⚙️ Configuration & Customization, LLM Routing, TTS Provider Options, Video Provider Options
 
 ## Knowledge Gaps
-- **2594 isolated node(s):** `fs`, `path`, `resolved`, `contextDirPath`, `projects` (+2589 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 3709 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **68 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2621 isolated node(s):** `fs`, `path`, `resolved`, `contextDirPath`, `projects` (+2616 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 3739 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **69 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `require_playable_video()` connect `require_playable_video` to `models/__init__.py`, `generate_lively_avatar_video`, `factory.py`, `.generate`, `generate_with_fallback`, `test_scene_breakdown_and_avatar.py`, `scene_renderers/router.py`, `test_content_scriptwriter.py`, `test_anti_slideshow_gate.py`, `TestWav2LipNeuralAvatar`, `render_svg_frames_to_mp4`, `RuntimeError`, `video_compositing.py`, `diagram_provider.py`, `AvatarProfile`?**
+- **Why does `require_playable_video()` connect `require_playable_video` to `generate_educational_image`, `models/__init__.py`, `diagram_provider.py`, `generate_lively_avatar_video`, `factory.py`, `VideoGenerationRequest`, `test_content_scriptwriter.py`, `test_scene_breakdown_and_avatar.py`, `render_svg_frames_to_mp4`, `test_acceptance_demos.py`, `test_optics_ray_diagram_renderer_creates_playable_mp4`, `quality_gate.py`, `Wav2Lip`, `RuntimeError`, `MuseTalkMacRenderer`, `video_compositing.py`, `escape_xml`, `AvatarProfile`?**
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **Why does `render_svg_frames_to_mp4()` connect `render_svg_frames_to_mp4` to `render_algebra_step_solve`, `RuntimeError`, `test_scene_breakdown_and_avatar.py`, `SceneRenderer`, `scene_renderers/__init__.py`, `require_playable_video`, `escape_xml`?**
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **Why does `run_scenario()` connect `runner.py` to `_parse_stream_json`, `RuntimeError`?**
   _High betweenness centrality (0.009) - this node is a cross-community bridge._
-- **Why does `render_svg_frames_to_mp4()` connect `render_svg_frames_to_mp4` to `test_scene_breakdown_and_avatar.py`, `render_generic_explainer`, `SceneRenderer`, `scene_renderers/__init__.py`, `require_playable_video`, `RuntimeError`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **What connects `fs`, `path`, `resolved` to the rest of the system?**
-  _2594 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _2621 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `models/__init__.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.04627915586819696 - nodes in this community are weakly interconnected._
-- **Should `llm.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.06636500754147813 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.047339593114241005 - nodes in this community are weakly interconnected._
+- **Should `assessment.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.051923076923076926 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._

@@ -37,8 +37,14 @@ export default function MarketingPage() {
 
           <div className="flex items-center gap-4">
             <Link
-              href="/dashboard"
+              href="/how-it-works"
               className="text-xs font-medium text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] transition-colors px-2 py-1"
+            >
+              How it works
+            </Link>
+            <Link
+              href="/dashboard"
+              className="text-xs font-medium text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] transition-colors px-2 py-1 hidden sm:inline"
             >
               Student Desk
             </Link>
@@ -226,6 +232,15 @@ export default function MarketingPage() {
               <h2 className="text-heading-1 font-serif text-[var(--color-ink)] mt-1">
                 How Shikshak AI teaches differently
               </h2>
+              <p className="text-body-sm text-[var(--color-ink-secondary)] mt-3">
+                Prefer a full agent walkthrough?{" "}
+                <Link
+                  href="/how-it-works"
+                  className="font-medium text-[var(--color-primary-accent)] hover:underline"
+                >
+                  Open the interactive system flow →
+                </Link>
+              </p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-3">
