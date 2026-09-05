@@ -9,9 +9,9 @@ import { createServerClient } from "@supabase/ssr";
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({ request });
 
-  // Skip protection for local-dev placeholder student id (when Supabase isn't
-  // configured yet — lets you click through the demo without auth).
-  const studentId = process.env.NEXT_PUBLIC_STUDENT_ID;
+  // Skip protection for demo student id (lets visitors click through and experience the demo).
+  const studentId =
+    process.env.NEXT_PUBLIC_STUDENT_ID ?? "00000000-0000-0000-0000-000000000001";
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (studentId || !supabaseUrl || supabaseUrl.includes("xxxx")) {
     return response;
