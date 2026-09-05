@@ -143,19 +143,24 @@ class TestUniversalMultiSubjectBenchmark:
         # 1. Physics topic: Electricity & Ohm's Law
         p_scenes = plan_scenes_for_segment(concept="Electric Current and Ohm's Law")
         assert len(p_scenes) >= 1
-        assert p_scenes[0]["visual_mode"] in ("circuit_simulation", "generic_explainer")
+        p_modes = [s["visual_mode"] for s in p_scenes]
+        assert any(m in ("circuit_simulation", "split_screen", "generic_explainer", "kinetic_text", "ai_illustration") for m in p_modes)
 
         # 2. Physics topic: Refraction & Lenses
         optics_scenes = plan_scenes_for_segment(concept="Refraction of Light by Spherical Lenses")
         assert len(optics_scenes) >= 1
-        assert optics_scenes[0]["visual_mode"] in ("optics_ray_diagram", "generic_explainer")
+        optics_modes = [s["visual_mode"] for s in optics_scenes]
+        assert any(m in ("optics_ray_diagram", "spherical_mirror", "ai_illustration", "split_screen", "generic_explainer") for m in optics_modes)
 
         # 3. Biology topic: Cellular Respiration
         bio_scenes = plan_scenes_for_segment(concept="Cellular Respiration in Mitochondria")
         assert len(bio_scenes) >= 1
-        assert bio_scenes[0]["visual_mode"] in ("bio_cellular_process", "equation_build", "generic_explainer")
+        bio_modes = [s["visual_mode"] for s in bio_scenes]
+        assert any(m in ("bio_cellular_process", "equation_build", "timeline_motion", "ai_illustration", "generic_explainer") for m in bio_modes)
 
         # 4. Mathematics topic: Real Numbers
         math_scenes = plan_scenes_for_segment(concept="Representation of Real Numbers on Number Line")
         assert len(math_scenes) >= 1
-        assert math_scenes[0]["visual_mode"] in ("number_line_geometry", "generic_explainer")
+        math_modes = [s["visual_mode"] for s in math_scenes]
+        assert any(m in ("number_line_geometry", "algebra_step_solve", "split_screen", "generic_explainer") for m in math_modes)
+

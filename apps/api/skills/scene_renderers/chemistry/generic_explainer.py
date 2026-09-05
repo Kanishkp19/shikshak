@@ -20,6 +20,7 @@ from skills.scene_renderers.base import (
     escape_xml,
     format_subscripts,
     render_svg_frames_to_mp4,
+    sanitize_display_text,
 )
 from skills.scene_renderers.icon_library import (
     ICONS,
@@ -33,10 +34,10 @@ from skills.scene_renderers.multi_domain_kits import (
 from models import GenericExplainerPayload
 
 
-# Distinct vibrant whiteboard marker palettes for sequential cards
+# Curated palette for observation badges and highlights
 MARKER_THEMES = [
     {"stroke": "#2563eb", "badge_bg": "#eff6ff", "badge_text": "#1d4ed8", "tag": "OBSERVATION 01"},
-    {"stroke": "#ea580c", "badge_bg": "#fff7ed", "badge_text": "#c2410c", "tag": "OBSERVATION 02"},
+    {"stroke": "#d97706", "badge_bg": "#fffbeb", "badge_text": "#b45309", "tag": "OBSERVATION 02"},
     {"stroke": "#7c3aed", "badge_bg": "#faf5ff", "badge_text": "#6d28d9", "tag": "OBSERVATION 03"},
     {"stroke": "#059669", "badge_bg": "#f0fdf4", "badge_text": "#047857", "tag": "OBSERVATION 04"},
 ]
@@ -53,11 +54,11 @@ def render_generic_explainer(
     """Render an illustrated, whiteboard-classroom explainer scene to MP4."""
     payload = GenericExplainerPayload.model_validate(payload_dict)
 
-    title = payload.title or "Key Concept Overview"
-    key_points = payload.key_points or ["Core pedagogical takeaway for this concept."]
-    equation = format_subscripts(payload.equation or "")
-    if equation == "NOT_IN_SOURCE":
-        equation = ""
+    title = sanitize_display_text(payload.title) or "Key Concept Overview"
+    raw_points = [sanitize_display_text(pt) for pt in (payload.key_points or []) if sanitize_display_text(pt)]
+    key_points = raw_points or ["Core pedagogical takeaway for this concept."]
+    raw_eq = sanitize_display_text(payload.equation)
+    equation = format_subscripts(raw_eq) if raw_eq else ""
 
     # Check if this scene matches a dedicated multi-domain ready-made kit
     specialized_kit = detect_multi_domain_scene(

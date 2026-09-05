@@ -64,6 +64,9 @@ VisualMode = Literal[
     MotionGraphicVisualMode,
     "generic_explainer",      # illustrated fallback — icons + equations + highlights
     "cinematic",              # transcript-grounded cinematic concept animation
+    "ai_illustration",        # synthesized pedagogical artwork & Ken Burns animation
+    "kinetic_text",           # typographic animated key concepts, definitions & takeaways
+    "split_screen",           # dual visual layout: illustration/diagram + structured takeaway card
 ]
 
 SceneRenderStatus = Literal["pending", "rendering", "ready", "failed"]
@@ -280,10 +283,31 @@ class AgentError(CamelModel):
 
 class _ChemSpecies(CamelModel):
     """One chemical species (reactant or product) in a reaction scene."""
-    name: str
+    name: str = ""
     formula: str
     state: Literal["solid", "liquid", "gas", "aqueous"] = "aqueous"
     color: str = "#38bdf8"         # SVG fill color for the beaker / flask
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def _coerce_name(cls, v: Any) -> str:
+        return str(v) if v else ""
+
+    @field_validator("state", mode="before")
+    @classmethod
+    def _coerce_state(cls, v: Any) -> str:
+        if not v:
+            return "aqueous"
+        s = str(v).lower().strip()
+        if s in ("aq", "aqueous", "solution", "dissolved"):
+            return "aqueous"
+        if s in ("s", "solid", "precipitate", "powder"):
+            return "solid"
+        if s in ("l", "liquid"):
+            return "liquid"
+        if s in ("g", "gas", "vapor", "vapour"):
+            return "gas"
+        return "aqueous"
 
 
 class _ObservationStep(CamelModel):
@@ -496,7 +520,7 @@ class MotionGraphicElement(CamelModel):
 
 
 class MotionGraphicPayload(CamelModel):
-    """Visual payload for Flick/Remotion motion graphics across all subjects.
+    """Visual payload for multi-subject motion graphics scenes.
 
     Strictly semantic: defines structure, step items, and visual cues.
     Preserves Coordinate Invariant: NO raw x, y, width, height, or arbitrary code.
@@ -519,6 +543,43 @@ class MotionGraphicPayload(CamelModel):
     badge: str = "LESSON SCENE"
 
 
+# ── Generative Visual Payloads ─────────────────────────────────────────────
+
+class AiIllustrationPayload(CamelModel):
+    """Visual payload for ai_illustration mode — synthesized pedagogical artwork."""
+    prompt: str = ""
+    style: str = "educational_illustration"
+    title: str = ""
+    caption: str = ""
+    image_url: Optional[str] = None
+    image_path: Optional[str] = None
+    entities: list[str] = Field(default_factory=list)
+    key_takeaway: str = ""
+
+
+class KineticTextPayload(CamelModel):
+    """Visual payload for kinetic_text mode — dynamic typography & key concepts."""
+    title: str = "Core Concept"
+    subtitle: str = ""
+    key_takeaways: list[str] = Field(default_factory=list)
+    badge: str = "KEY PRINCIPLE"
+    equation: str = ""
+    highlight_word: str = ""
+
+
+class SplitScreenPayload(CamelModel):
+    """Visual payload for split_screen mode — side-by-side illustration + key takeaways."""
+    left_title: str = ""
+    left_type: str = "image"
+    left_image_prompt: str = ""
+    left_image_url: Optional[str] = None
+    left_image_path: Optional[str] = None
+    right_title: str = "Key Principles"
+    right_points: list[str] = Field(default_factory=list)
+    formula: str = ""
+    key_takeaway: str = ""
+
+
 # Union of all payload models — used by the renderer dispatch
 VisualPayload = (
     ReactionLabPayload
@@ -535,6 +596,9 @@ VisualPayload = (
     | AlgebraStepSolvePayload
     | MotionGraphicPayload
     | GenericExplainerPayload
+    | AiIllustrationPayload
+    | KineticTextPayload
+    | SplitScreenPayload
 )
 
 # Map from visual_mode string → payload Pydantic class (single source of truth)
@@ -555,13 +619,17 @@ VISUAL_MODE_PAYLOAD_MAP: dict[str, type] = {
     # Mathematics Pack
     "number_line_geometry":   NumberLineGeometryPayload,
     "algebra_step_solve":     AlgebraStepSolvePayload,
-    # Flick/Remotion Motion Pack (Multi-Subject)
+    # Multi-Subject Motion Pack
     "motion_graphic":         MotionGraphicPayload,
     "animated_text":          MotionGraphicPayload,
     "generic_motion":         MotionGraphicPayload,
     "step_flow":              MotionGraphicPayload,
     "concept_highlight":      MotionGraphicPayload,
     "timeline_motion":        MotionGraphicPayload,
+    # Generative AI & Typographic Pack
+    "ai_illustration":        AiIllustrationPayload,
+    "kinetic_text":           KineticTextPayload,
+    "split_screen":           SplitScreenPayload,
     # Fallback & Cinematic
     "generic_explainer":      GenericExplainerPayload,
     "cinematic":              GenericExplainerPayload,

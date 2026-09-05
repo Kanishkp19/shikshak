@@ -6,7 +6,9 @@ and high-speed CairoSVG + FFmpeg encoding pipe.
 """
 from __future__ import annotations
 
+import html
 import os
+import re
 import subprocess
 import uuid
 from pathlib import Path
@@ -29,6 +31,23 @@ class SceneRenderer(Protocol):
         out_path: Path | None = None,
     ) -> Path:
         ...
+
+
+_ALLOWED_XML_ENTITIES = {"&amp;", "&lt;", "&gt;", "&quot;", "&apos;"}
+
+
+def sanitize_svg_entities(svg_str: str) -> str:
+    """Ensure SVG XML string does not contain HTML-only entities that break expat XML parser."""
+    def _replace_entity(m: re.Match) -> str:
+        entity = m.group(0)
+        if entity in _ALLOWED_XML_ENTITIES or entity.startswith("&#"):
+            return entity
+        decoded = html.unescape(entity)
+        if decoded != entity:
+            return escape_xml(decoded) if decoded in ("&", "<", ">", '"', "'") else decoded
+        return " "
+
+    return re.sub(r"&[A-Za-z0-9_#]+;", _replace_entity, svg_str)
 
 
 def render_svg_frames_to_mp4(
@@ -58,15 +77,12 @@ def render_svg_frames_to_mp4(
         "ffmpeg", "-y",
         "-f", "image2pipe",
         "-vcodec", "png",
-        "-framerate", str(fps),
-        "-i", "-",
         "-r", str(fps),
+        "-i", "-",
         "-c:v", "libx264",
         "-pix_fmt", "yuv420p",
-        "-crf", "16",
-        "-preset", "veryfast",
-        "-movflags", "+faststart",
-        "-t", str(duration_seconds),
+        "-preset", "ultrafast",
+        "-crf", "18",
         str(target_path),
     ]
 
@@ -82,8 +98,9 @@ def render_svg_frames_to_mp4(
             progress = min(1.0, frame_idx / max(1, total_frames - 1))
             elapsed_ms = int((frame_idx / fps) * 1000)
             svg_content = svg_generator(progress, elapsed_ms, total_ms)
+            clean_svg = sanitize_svg_entities(svg_content)
             png_bytes = cairosvg.svg2png(
-                bytestring=svg_content.encode("utf-8"),
+                bytestring=clean_svg.encode("utf-8"),
                 output_width=width,
                 output_height=height,
             )
@@ -106,9 +123,11 @@ def render_svg_frames_to_mp4(
 
 def escape_xml(text: str) -> str:
     """Escape XML characters for safe inclusion in SVG text elements."""
+    if text is None:
+        return ""
+    s = html.unescape(str(text))
     return (
-        str(text)
-        .replace("&", "&amp;")
+        s.replace("&", "&amp;")
         .replace("<", "&lt;")
         .replace(">", "&gt;")
         .replace('"', "&quot;")
@@ -124,5 +143,29 @@ def format_subscripts(formula: str) -> str:
     # Only convert numbers immediately following letters or closing brackets/parentheses into subscripts
     import re
     return re.sub(r"([A-Za-z\)\]])(\d+)", lambda m: m.group(1) + m.group(2).translate(subscripts), formula)
+
+
+FORBIDDEN_TEXT_PLACEHOLDERS = {
+    "not_in_source",
+    "none",
+    "n/a",
+    "na",
+    "undefined",
+    "[missing]",
+    "null",
+    "not available",
+    "unknown",
+}
+
+
+def sanitize_display_text(text: Any) -> str:
+    """Sanitize educational text, preventing LLM placeholders (e.g. NOT_IN_SOURCE) from rendering."""
+    if text is None:
+        return ""
+    cleaned = str(text).strip()
+    if cleaned.lower() in FORBIDDEN_TEXT_PLACEHOLDERS or "not_in_source" in cleaned.lower():
+        return ""
+    return cleaned
+
 
 

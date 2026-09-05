@@ -31,7 +31,7 @@ def render_optics_ray_diagram(
 
     element = payload.optical_element or "convex_lens"
     image_nature = payload.image_nature or "Real, Inverted, Same Size"
-    formula = "1/f = 1/v - 1/u"
+    formula = payload.formula or ("1/v + 1/u = 1/f" if "mirror" in element.lower() else "1/f = 1/v - 1/u")
     obs = payload.key_observation or "Rays parallel to principal axis refract through principal focus F₂"
 
     # Coordinates for optical system: Optical center O at (460, 330)

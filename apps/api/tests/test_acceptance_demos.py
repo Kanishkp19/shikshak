@@ -119,3 +119,57 @@ def test_demo_4_mathematics_quadratic_derivation():
     assert result.exists()
     assert result.stat().st_size > 10000
     require_playable_video(str(result), min_width=1280, min_height=720, min_duration_seconds=4.5)
+
+
+def test_demo_5_daily_life_chemical_changes_with_talking_avatar():
+    out_path = DEMO_OUTPUT_DIR / "demo_5_daily_life_chemical_changes.mp4"
+    from skills.scene_renderers.generative import render_split_screen
+    from skills.video_stitching import stitch_segment
+    from skills.lip_sync_rendering import render_lip_sync
+    from models.avatar import AvatarPresenterMode
+
+    payload = {
+        "left_title": "Daily Life Chemical Changes",
+        "right_title": "Observable Phenomena",
+        "right_points": [
+            "Milk left in warm conditions forms thick curd",
+            "Iron nails develop reddish-brown flaky rust",
+            "Grapes and sugarcane juice undergo fermentation",
+        ],
+        "formula": "NOT_IN_SOURCE",
+        "key_takeaway": "Chemical reactions alter initial identity and produce new substances",
+    }
+    narration = (
+        "In our daily life, we observe many chemical changes: milk turning into curd, "
+        "an iron nail rusting when exposed to moist air, and fermentation of juices."
+    )
+
+    concept_clip = DEMO_OUTPUT_DIR / "demo_5_concept_clip.mp4"
+    concept_res = render_split_screen(
+        payload_dict=payload,
+        narration_text=narration,
+        duration_seconds=5.0,
+        out_path=concept_clip,
+    )
+    assert concept_res.exists()
+
+    # Generate audio-synced talking avatar
+    audio_file = Path("assets/teacher_voice.wav")
+    assert audio_file.exists()
+    avatar_video = render_lip_sync(str(audio_file))
+    assert Path(avatar_video).exists()
+
+    # Stitch into final lesson segment with Picture-in-Picture talking teacher
+    final_video = stitch_segment(
+        avatar_video_path=avatar_video,
+        concept_video_path=str(concept_res),
+        audio_path=str(audio_file),
+        presenter_mode=AvatarPresenterMode.TEACHER_EXPLAIN,
+    )
+    import shutil
+    shutil.copy(final_video, str(out_path))
+
+    assert out_path.exists()
+    assert out_path.stat().st_size > 50000
+    require_playable_video(str(out_path), min_width=1280, min_height=720, min_duration_seconds=4.0)
+

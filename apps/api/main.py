@@ -66,7 +66,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_origin_regex=r"https://.*\.onrender\.com|https://.*\.vercel\.app|http://localhost:\d+",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -273,6 +277,11 @@ def _format_video_url(url: Optional[str]) -> Optional[str]:
         return url
     if url.startswith("/tmp/"):
         filename = Path(url).name
+        base_url = (settings.public_api_url or "").rstrip("/")
+        if base_url:
+            if not (base_url.startswith("http://") or base_url.startswith("https://")):
+                base_url = f"https://{base_url}"
+            return f"{base_url}/api/v1/videos/{filename}"
         return f"http://localhost:8000/api/v1/videos/{filename}"
     return url
 

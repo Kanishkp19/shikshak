@@ -186,13 +186,10 @@ def render_local_animated_teacher(
     profile: AvatarProfile,
     out_path: Path,
 ) -> Path:
-    """Deterministic local avatar renderer.
+    """Deterministic, audio-driven local avatar renderer.
 
-    1. First attempts local neural Wav2Lip inference on the female educator portrait
-       to generate accurate, realistic lip and mouth motion synchronized to audio.
-    2. Applies post-processing (silence gating, irregular blinks, micro-drift).
-    3. If Wav2Lip is unavailable or encounters an error, falls back to natural
-       breathing animation.
+    Generates synchronized talking educator video with active mouth opening,
+    visemes, natural blinking, and subtle micro-movements.
     """
     portrait_path = profile.get_absolute_portrait_path()
     if not portrait_path.exists():
@@ -201,32 +198,20 @@ def render_local_animated_teacher(
         if alt.exists():
             portrait_path = alt
 
-    # ── Attempt Local Neural Wav2Lip Lip-Sync First ──
+    # 1. Try high-fidelity audio-driven lively avatar generator
     try:
-        from skills.lip_sync_rendering import _run_wav2lip, _postprocess_avatar, _finalize_video
-
-        out_dir = out_path.parent
-        raw_w2l = out_dir / f"raw_w2l_{uuid.uuid4().hex}.mp4"
-        enhanced_path = out_dir / f"enhanced_{uuid.uuid4().hex}.mp4"
-
-        logger.info("[Avatar] Running local neural Wav2Lip on %s with audio %s", portrait_path.name, audio_path.name)
-        if _run_wav2lip(face_input=portrait_path, audio_path=audio_path, out_path=raw_w2l):
-            _postprocess_avatar(
-                video_path=raw_w2l,
-                ref_img_path=portrait_path,
-                audio_path=audio_path,
-                out_path=enhanced_path,
-            )
-            _finalize_video(enhanced_path, audio_path, out_path)
-            raw_w2l.unlink(missing_ok=True)
-            enhanced_path.unlink(missing_ok=True)
-            require_playable_video(str(out_path), min_duration_seconds=0.2)
-            logger.info("[Avatar] Neural lip-sync successful: %s", out_path)
-            return out_path
+        from skills.avatar.lively_avatar import generate_lively_avatar_video
+        return generate_lively_avatar_video(
+            portrait_path=portrait_path,
+            audio_path=audio_path,
+            out_path=out_path,
+            fps=25,
+            canvas_size=512,
+        )
     except Exception as exc:
-        logger.warning("[Avatar] Neural lip-sync fallback attempt failed (%s); proceeding with breathing generator", exc)
+        logger.warning("[Avatar] LivelyTalkingAvatar failed (%s); falling back to breathing zoom filter.", exc)
 
-    # ── Secondary Fallback: Subtle Breathing Animation ──
+    # 2. Resilient fallback: Subtle Breathing Animation with Audio Sync
     if not portrait_path.exists():
         portrait_path.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run([
@@ -240,8 +225,6 @@ def render_local_animated_teacher(
         "-i", str(portrait_path),
         "-i", str(audio_path),
         "-filter_complex",
-        # Natural breathing subtle zoom & pulse filter:
-        # scales subtly between 1.0 and 1.018 on a 3-second cycle, cropped to 512x512
         (
             "[0:v]scale=540:540,"
             "zoompan=z='1.0+0.015*sin(2*PI*it/3.2)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':"
@@ -265,3 +248,4 @@ def render_local_animated_teacher(
 
     require_playable_video(str(out_path), min_duration_seconds=0.2)
     return out_path
+

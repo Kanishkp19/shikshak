@@ -205,7 +205,15 @@ def run_session_pipeline(session_id: str) -> dict[str, Any]:
                         concept=s["concept"],
                         session_id=session_id,
                     )
-                    s["scenes"] = audited_scenes
+
+                    # 4. Visual Director (Strategy & Asset Allocation)
+                    from agents.visual_director import direct_scenes_for_segment
+                    directed_scenes = direct_scenes_for_segment(
+                        scenes=audited_scenes,
+                        concept=s["concept"],
+                        depth=s["depth"],
+                    )
+                    s["scenes"] = directed_scenes
 
             elif step.agent == "qa_grounding_guard":
                 for s in plan["segments"]:

@@ -1,8 +1,8 @@
 """
 Shikshak AI — Avatar Rendering Agent.
 
-Single responsibility: take the synthesised audio and produce a lip-synced
-avatar video. Wraps the lip-sync skill — never calls Wav2Lip directly.
+Single responsibility: take the synthesised audio and produce an educator
+avatar video via the lip_sync_rendering skill.
 """
 from __future__ import annotations
 

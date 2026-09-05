@@ -41,7 +41,11 @@ from skills.scene_renderers.chemistry.motion_adapter import render_chemistry_mot
 from skills.scene_renderers.physics.motion_adapter import render_physics_motion
 from skills.scene_renderers.biology.motion_adapter import render_biology_motion
 from skills.scene_renderers.mathematics.motion_adapter import render_mathematics_motion
-from skills.scene_renderers.flick_renderer import render_flick_motion
+from skills.scene_renderers.generative import (
+    render_ai_illustration,
+    render_kinetic_text,
+    render_split_screen,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -100,8 +104,8 @@ def render_generic_motion_canvas(
         )
         return render_motion_canvas_spec(spec, duration_seconds=duration_seconds, out_path=out_path)
     except Exception as exc:
-        logger.warning("[Router] Motion Canvas generic dispatch failed: %s; falling back to Flick", exc)
-        return render_flick_motion(payload_dict, narration_text, duration_seconds, out_path)
+        logger.warning("[Router] Motion Canvas generic dispatch failed: %s; falling back to generic explainer", exc)
+        return render_generic_explainer(payload_dict, narration_text, duration_seconds, out_path)
 
 
 # Single source of truth mapping controlled visual_mode → renderer function
@@ -125,13 +129,13 @@ ROUTER_REGISTRY: dict[str, Callable[..., Path]] = {
     "number_line_geometry":   render_number_line_geometry,
     "algebra_step_solve":     render_algebra_step_solve,
 
-    # ── Flick / Remotion Motion Graphics Pack (Legacy Multi-Subject) ─
-    "motion_graphic":         render_flick_motion,
-    "animated_text":          render_flick_motion,
-    "generic_motion":         render_flick_motion,
-    "step_flow":              render_flick_motion,
-    "concept_highlight":      render_flick_motion,
-    "timeline_motion":        render_flick_motion,
+    # ── Motion Graphics Pack (Native Motion Canvas) ──────────────────
+    "motion_graphic":         render_generic_motion_canvas,
+    "animated_text":          render_generic_motion_canvas,
+    "generic_motion":         render_generic_motion_canvas,
+    "step_flow":              render_generic_motion_canvas,
+    "concept_highlight":      render_generic_motion_canvas,
+    "timeline_motion":        render_generic_motion_canvas,
 
     # ── Motion Canvas Primary Dedicated Modes ───────────────────────
     "chemistry_motion":       render_chemistry_motion,
@@ -139,6 +143,11 @@ ROUTER_REGISTRY: dict[str, Callable[..., Path]] = {
     "biology_motion":         render_biology_motion,
     "mathematics_motion":     render_mathematics_motion,
     "motion_canvas":          render_generic_motion_canvas,
+
+    # ── Generative AI & Typographic Pack ────────────────────────────
+    "ai_illustration":        render_ai_illustration,
+    "kinetic_text":           render_kinetic_text,
+    "split_screen":           render_split_screen,
 
     # ── Universal Illustrated Fallback ──────────────────────────────
     "generic_explainer":      render_generic_explainer,

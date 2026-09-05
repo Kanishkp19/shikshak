@@ -7,6 +7,7 @@ on the side-rail, and stitches segments into final downloadable lessons.
 """
 from __future__ import annotations
 
+import logging
 import subprocess
 import uuid
 from pathlib import Path
@@ -15,9 +16,12 @@ from typing import Any
 from models.avatar import AvatarPresenterMode
 from skills.video_generation.media import (
     MediaValidationError,
+    probe_media,
     require_playable_audio,
     require_playable_video,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def stitch_segment(
@@ -88,6 +92,26 @@ def stitch_segment(
     else:
         cmd += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
 
+    pad_concept = ""
+    pad_avatar = ""
+    if audio_is_usable and audio_source:
+        try:
+            concept_info = probe_media(concept)
+            audio_info = probe_media(audio_source)
+            c_dur = float(concept_info.get("duration_seconds") or 0.0)
+            a_dur = float(audio_info.get("duration_seconds") or 0.0)
+            if a_dur > c_dur + 0.05:
+                diff = round(a_dur - c_dur + 0.15, 2)
+                pad_concept = f"tpad=stop_mode=clone:stop_duration={diff},"
+            if avatar_is_usable and avatar:
+                avatar_info = probe_media(avatar)
+                av_dur = float(avatar_info.get("duration_seconds") or 0.0)
+                if a_dur > av_dur + 0.05:
+                    diff_av = round(a_dur - av_dur + 0.15, 2)
+                    pad_avatar = f"tpad=stop_mode=clone:stop_duration={diff_av},"
+        except Exception as probe_err:
+            logger.debug("[Stitcher] Duration probe check skipped: %s", probe_err)
+
     if avatar_is_usable and avatar:
         cmd += ["-i", str(avatar)]
 
@@ -95,10 +119,10 @@ def stitch_segment(
             # ── Prominent Teacher Intro / Recap Stage ──
             filter_parts = [
                 "color=c=0x0b1329:s=1280x720[bg]",
-                "[2:v]scale=520:580:force_original_aspect_ratio=increase:flags=lanczos,"
+                f"[2:v]{pad_avatar}scale=520:580:force_original_aspect_ratio=increase:flags=lanczos,"
                 "crop=520:580,"
                 "pad=524:584:2:2:color=0x38bdf8@0.9,setsar=1[presenter]",
-                "[0:v]scale=360:202:force_original_aspect_ratio=decrease:flags=lanczos,"
+                f"[0:v]{pad_concept}scale=360:202:force_original_aspect_ratio=decrease:flags=lanczos,"
                 "pad=364:206:2:2:color=0x2563eb@0.85,setsar=1[preview]",
                 "[1:a]showwaves=s=524x20:mode=line:colors=0x38bdf8@0.95:scale=sqrt,setsar=1[waves]",
                 "[bg][presenter]overlay=(W-w)/2:50[stage_with_p]",
@@ -110,9 +134,9 @@ def stitch_segment(
             # 100% full 1280x720 canvas for scientific visualization,
             # floating presenter card in bottom-right corner with 2px cyan border
             filter_parts = [
-                "[0:v]scale=1280:720:force_original_aspect_ratio=decrease:flags=lanczos,"
+                f"[0:v]{pad_concept}scale=1280:720:force_original_aspect_ratio=decrease:flags=lanczos,"
                 "pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=0x0b1329,setsar=1[stage]",
-                "[2:v]scale=220:250:force_original_aspect_ratio=increase:flags=lanczos,"
+                f"[2:v]{pad_avatar}scale=220:250:force_original_aspect_ratio=increase:flags=lanczos,"
                 "crop=220:250,"
                 "pad=224:254:2:2:color=0x38bdf8@0.9,setsar=1[pip]",
                 "[1:a]showwaves=s=224x16:mode=line:colors=0x38bdf8@0.95:scale=sqrt,setsar=1[waves]",
@@ -122,7 +146,7 @@ def stitch_segment(
     else:
         # ── TEACHER_OFF_SCREEN or Pure Concept View ──
         filter_parts = [
-            "[0:v]scale=1280:720:force_original_aspect_ratio=decrease:flags=lanczos,"
+            f"[0:v]{pad_concept}scale=1280:720:force_original_aspect_ratio=decrease:flags=lanczos,"
             "pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=0x0b1329,setsar=1[v]"
         ]
 
@@ -214,3 +238,83 @@ def concat_segments(segment_paths: list[str]) -> str:
         raise RuntimeError("Unable to concatenate all completed lesson segments") from exc
 
     return str(out_path)
+
+
+def concat_segments_with_transitions(
+    segment_paths: list[str],
+    transition: str = "fade",
+    transition_duration: float = 0.4,
+    out_path: str | Path | None = None,
+) -> str:
+    """Concatenate scene clips with smooth crossfade transitions between them.
+
+    Guarantees:
+      1. Falls back seamlessly to concat_segments if inputs have mismatched formats or xfade fails.
+      2. Validates final output video using require_playable_video.
+    """
+    if not segment_paths:
+        return ""
+
+    valid_paths = [Path(p) for p in segment_paths if p and Path(p).exists()]
+    if not valid_paths:
+        return ""
+
+    if len(valid_paths) == 1:
+        return str(valid_paths[0])
+
+    out_dir = Path("/tmp/shikshak_final")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    if out_path is None:
+        target_path = out_dir / f"transition_concat_{uuid.uuid4().hex}.mp4"
+    else:
+        target_path = Path(out_path)
+
+    try:
+        durations: list[float] = []
+        for p in valid_paths:
+            info = probe_media(p)
+            durations.append(max(0.5, float(info.duration_seconds)))
+
+        trans_dur = min(transition_duration, min(durations) / 2.5)
+
+        input_args: list[str] = []
+        filter_lines: list[str] = []
+        for i, p in enumerate(valid_paths):
+            input_args.extend(["-i", str(p)])
+            filter_lines.append(
+                f"[{i}:v]scale=1280:720:force_original_aspect_ratio=decrease,"
+                f"pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=25[v{i}]"
+            )
+
+        current_offset = durations[0] - trans_dur
+        last_stream = "[v0]"
+        for i in range(1, len(valid_paths)):
+            next_stream = f"[v{i}]"
+            out_stream = f"[x{i}]" if i < len(valid_paths) - 1 else "[outv]"
+            filter_lines.append(
+                f"{last_stream}{next_stream}xfade=transition={transition}:duration={trans_dur:.2f}:offset={current_offset:.2f}{out_stream}"
+            )
+            last_stream = f"[x{i}]"
+            if i < len(valid_paths) - 1:
+                current_offset += durations[i] - trans_dur
+
+        filter_complex = ";".join(filter_lines)
+        cmd = [
+            "ffmpeg", "-y",
+            *input_args,
+            "-filter_complex", filter_complex,
+            "-map", "[outv]",
+            "-c:v", "libx264",
+            "-crf", "18",
+            "-pix_fmt", "yuv420p",
+            "-preset", "veryfast",
+            "-movflags", "+faststart",
+            str(target_path),
+        ]
+        subprocess.run(cmd, check=True, timeout=180, capture_output=True)
+        require_playable_video(target_path, min_width=640, min_height=360, min_duration_seconds=1.0)
+        return str(target_path)
+    except Exception as exc:
+        logger.info("[VideoStitching] Transition crossfade failed: %s; falling back to hard concat", exc)
+        return concat_segments(segment_paths)
+

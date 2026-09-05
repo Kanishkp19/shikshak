@@ -1,0 +1,57 @@
+services:
+  # ── Shikshak AI Backend API (FastAPI + Worker) ──────────────────────────────
+  - type: web
+    name: shikshak-api
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: apps/api
+    buildCommand: pip install -r requirements.txt && chmod +x start.sh
+    startCommand: ./start.sh
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TTS_PROVIDER
+        value: edge_tts
+      - key: VIDEO_PROVIDER
+        value: diagram
+      - key: CONTENT_LLM_PROVIDER
+        value: groq
+      - key: ANIMATION_LLM_PROVIDER
+        value: gemini
+      - key: PUBLIC_API_URL
+        sync: false
+
+  # ── Shikshak AI Frontend (Next.js 15 App Router) ────────────────────────────
+  - type: web
+    name: shikshak-web
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: apps/web
+    buildCommand: npm install && npm run build
+    startCommand: npm run start -- -p $PORT
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20.17.0
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: NEXT_PUBLIC_API_BASE_URL
+        sync: false

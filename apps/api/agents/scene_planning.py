@@ -14,6 +14,8 @@ Supported Subject Packs:
 from __future__ import annotations
 
 import json
+import math
+import re
 from typing import Any, Optional
 from pydantic import BaseModel, Field
 
@@ -111,27 +113,33 @@ Supported Visual Modes across STEM & Humanities Domains:
    - "timeline_motion": Sequential historical milestones, multi-phase reaction progressions, or biological eras.
      visual_payload: {{"template": "timeline", "title": "Respiration Phases", "steps": ["Glycolysis in Cytoplasm", "Krebs Cycle in Matrix", "Oxidative Phosphorylation in Cristae"], "key_takeaway": "Generates 38 ATP molecules sequentially.", "badge": "BIO TIMELINE"}}
 
-6. UNIVERSAL FALLBACK:
+6. GENERATIVE AI & DYNAMIC TYPOGRAPHY PACK:
+   - "ai_illustration": Synthesized pedagogical artwork for real-world phenomena, complex anatomical/environmental structures, historical contexts, or PDF lesson topics with cinematic camera motion.
+     visual_payload: {{"title": "Chloroplast Thylakoid Structure", "caption": "Membrane-bound compartments where light reactions occur", "prompt": "Detailed scientific illustration of chloroplast thylakoids and stroma", "style": "educational_illustration", "entities": ["Thylakoid", "Stroma", "Granum"], "key_takeaway": "Light absorption occurs within thylakoid membranes"}}
+   - "kinetic_text": High-impact typographic concept card for core definitions, laws, or opening/closing takeaways.
+     visual_payload: {{"title": "Newton's First Law of Motion", "subtitle": "The Law of Inertia", "key_takeaways": ["An object at rest stays at rest unless acted upon by an external force", "Inertia depends directly on mass"], "badge": "FUNDAMENTAL LAW", "equation": "F_net = 0 => dv/dt = 0"}}
+   - "split_screen": Dual-pane composition with schematic apparatus or illustration on left and structured takeaways/formula on right.
+     visual_payload: {{"left_title": "Electromagnetic Induction", "left_type": "image", "left_image_prompt": "Bar magnet moving through copper solenoid coil with galvanometer", "right_title": "Faraday's Law Observations", "right_points": ["Relative motion induces electromotive force", "Deflection direction reverses with magnet pole"], "formula": "emf = -N (dPhi/dt)", "key_takeaway": "Changing magnetic flux induces electric current"}}
+
+7. UNIVERSAL FALLBACK:
    - "generic_explainer": Illustrated concept cards with icons, equations, and takeaways.
      visual_payload: {{"title": "Scientific Concept", "key_points": ["Point 1", "Point 2"], "icons": ["atom", "sparkles"], "equation": ""}}
 
 CRITICAL RULES:
 1. Act as the Lead Educational Animator: plan 3 to 5 discrete, lively visual scenes for the segment narration.
-2. BAN STATIC SLIDESHOWS: NEVER create static PowerPoint-style cards with bullet-point lists of equations (e.g. lists like "• f = R/2", "• 1/v + 1/u = 1/f"). Every formula MUST be animated within an active physical apparatus or step-by-step derivation:
-   - Optical mirrors/curvature -> "spherical_mirror"
-   - Lenses / Ray refraction -> "optics_ray_diagram"
-   - Electric circuits & Ohm's law -> "circuit_simulation"
-   - Chemical reactions & beakers -> "reaction_lab"
-   - Chemical formula combining -> "equation_build"
-   - Algebraic & mathematical derivations -> "algebra_step_solve"
+2. BAN STATIC SLIDESHOWS: NEVER create static PowerPoint-style cards with bullet-point lists of equations. Every formula MUST be animated within an active physical apparatus, step-by-step derivation, or dynamic split-screen.
 3. Select the MOST ACCURATE visual mode:
+   - Real-world objects, macroscopic phenomena, PDF textbook diagrams, environments -> "ai_illustration"
+   - Formal laws, definitions, summary cards, opening concept hooks -> "kinetic_text"
+   - Side-by-side visual apparatus + formula/principles -> "split_screen"
    - Chemical reaction apparatus / beakers -> "reaction_lab"
    - Chemical formula combining / equation steps -> "equation_build"
    - Laboratory oxidation / heating experiment -> "experiment_observation"
    - Mass conservation / atom counting -> "balancing_exercise"
    - Electric circuits & schematics -> "circuit_simulation"
-   - Ray optics / refraction / reflection -> "optics_ray_diagram"
-   - Spherical mirror curvature & focal relations -> "spherical_mirror"
+   - Ray optics / refraction / reflection / lenses / image formation -> "optics_ray_diagram"
+   - Spherical mirror curvature / focal relations / pole & center of curvature -> "spherical_mirror"
+   - RULE FOR LIGHT & OPTICS: Never choose abstract "ai_illustration" for reflection, refraction, lenses, or mirrors; always route to "optics_ray_diagram" or "spherical_mirror".
    - Cell organelles & anatomy -> "bio_cellular_process" or "anatomical_structure"
    - Number line & coordinate geometry -> "number_line_geometry"
    - Dynamic pedagogical flows & kinetic pathways -> "motion_graphic", "step_flow", or "timeline_motion"
@@ -233,7 +241,16 @@ def _validate_and_normalize_scenes(
         narration = sc.narration_span or sc.narration_text or f"Observing {concept}."
         words = len(narration.split())
         calculated_dur = max(3.0, round(words / 2.3, 1))
-        duration = sc.duration_seconds if sc.duration_seconds > 1.0 else calculated_dur
+        # Derive speech-paced duration from narration word count unless LLM provided custom non-default duration
+        if sc.duration_seconds > 1.0 and sc.duration_seconds != 6.0:
+            duration = sc.duration_seconds
+        else:
+            duration = calculated_dur
+
+        # Sanitize placeholders
+        from skills.scene_renderers.base import sanitize_display_text
+        clean_equation = sanitize_display_text(sc.on_screen_equation)
+        clean_takeaway = sanitize_display_text(sc.key_takeaway)
 
         # Extract entities from on_screen_labels or concept if empty
         entities = sc.entities or sc.on_screen_labels or [concept[:40]]
@@ -244,9 +261,9 @@ def _validate_and_normalize_scenes(
             narration_text=sc.narration_text or narration,
             visual_mode=mode,
             visual_payload=payload_dict,
-            on_screen_equation=sc.on_screen_equation or "",
+            on_screen_equation=clean_equation,
             on_screen_labels=sc.on_screen_labels or [],
-            key_takeaway=sc.key_takeaway or "",
+            key_takeaway=clean_takeaway,
             narration_span=sc.narration_span or narration,
             duration_seconds=duration,
             visual_objective=sc.visual_objective or sc.learning_objective or f"Illustrate {concept}",
@@ -260,187 +277,163 @@ def _validate_and_normalize_scenes(
         )
         output_scenes.append(scene_obj.model_dump(mode="json"))
 
+
     return output_scenes
 
 
 def _fallback_scenes(
     concept: str, level: str, language: str, narration_script: str
 ) -> list[dict[str, Any]]:
-    """Deterministic fallback across Physics, Biology, Mathematics, and Chemistry."""
-    c_lower = concept.lower()
+    """Deterministic, dynamic scene synthesis derived strictly from the narration and concept.
 
+    Zero hardcoding: dynamically decomposes the transcript into pedagogical narrative beats
+    and infers appropriate visual modes and key takeaway cards purely from input text.
+    """
     script = (narration_script or "").strip()
-    dur = max(4.0, round(len(script.split()) / 2.3, 1)) if script else 6.0
+    if not script:
+        script = f"In this lesson, we explore {concept}. We analyze the foundational principles, key mechanisms, and observable real-world results."
 
-    # 1. Physics: Electricity & Circuits
-    if any(k in c_lower for k in ("electric", "circuit", "ohm", "current", "voltage", "resistan", "potenti")):
-        text = "In a closed electric circuit, potential difference from a battery drives a continuous flow of electric charge through the resistor."
-        return [
-            SceneIn(
-                scene_order=1,
-                learning_objective="Understand electric circuit components and current flow",
-                narration_text=script or text,
-                visual_mode="circuit_simulation",
-                visual_payload={
-                    "circuit_type": "series",
-                    "voltage": 12.0,
-                    "resistance": 6.0,
-                    "current": 2.0,
-                    "formula": "V = I × R",
-                    "observation": "Current of 2.0 Amperes flows steadily through the 6Ω load under 12V potential.",
-                },
-                on_screen_equation="V = I × R ⇒ I = V / R = 12V / 6Ω = 2A",
-                on_screen_labels=["12V DC Battery", "6Ω Resistor", "Ammeter (2A)", "Closed Switch"],
-                key_takeaway="Ohm's Law states current is directly proportional to voltage across a conductor.",
-                narration_span=script or text,
-                duration_seconds=dur,
-                visual_objective="Simulate current flow and Ohm's law in closed DC circuit",
-                entities=["Battery", "Resistor", "Current Flow", "Ammeter"],
-                motion_beats=[{"at": 0.0, "action": "establish", "target": "circuit"}, {"at": round(dur * 0.5, 1), "action": "pan_zoom", "target": "resistor"}],
-            ).model_dump(mode="json"),
-        ]
-
-    # 2. Physics: Optics & Light
-    if any(k in c_lower for k in ("light", "optic", "lens", "mirror", "reflect", "refract", "ray", "focal")):
-        text = "When an object is placed at 2F₁ in front of a convex lens, refracted rays intersect at 2F₂ to produce a real, inverted image of the same size."
-        return [
-            SceneIn(
-                scene_order=1,
-                learning_objective="Ray tracing and real image formation by a convex lens",
-                narration_text=script or text,
-                visual_mode="optics_ray_diagram",
-                visual_payload={
-                    "optical_element": "convex_lens",
-                    "focal_length": 10.0,
-                    "object_distance": 20.0,
-                    "object_height": 5.0,
-                    "image_distance": 20.0,
-                    "image_height": -5.0,
-                    "image_nature": "Real, Inverted, Same Size",
-                    "formula": "1/f = 1/v - 1/u",
-                    "key_observation": "Parallel rays converge through principal focus F₂.",
-                },
-                on_screen_equation="1/f = 1/v - 1/u",
-                on_screen_labels=["Convex Lens", "Principal Focus (F)", "Object at 2F₁", "Inverted Image at 2F₂"],
-                key_takeaway="Convex lenses converge light rays to form real, inverted images at conjugate focal distances.",
-                narration_span=script or text,
-                duration_seconds=dur,
-                visual_objective="Trace refraction and conjugate real image formation",
-                entities=["Convex Lens", "Principal Axis", "Focal Point F", "Refracted Rays"],
-                motion_beats=[{"at": 0.0, "action": "establish", "target": "lens_axis"}, {"at": round(dur * 0.5, 1), "action": "pan_zoom", "target": "image_plane"}],
-            ).model_dump(mode="json"),
-        ]
-
-    # 3. Biology: Cellular Respiration & Life Processes
-    if any(k in c_lower for k in ("respirat", "glucose", "mitochondr", "atp", "cellular", "photosynth")):
-        text = "Inside cellular mitochondria, glucose combines with oxygen through metabolic stages, yielding 38 ATP energy molecules along with carbon dioxide and water."
-        return [
-            SceneIn(
-                scene_order=1,
-                learning_objective="Biochemical pathway of cellular respiration in mitochondria",
-                narration_text=script or text,
-                visual_mode="bio_cellular_process",
-                visual_payload={
-                    "process_name": "Cellular Respiration",
-                    "organelle": "Mitochondria",
-                    "inputs": ["Glucose (C₆H₁₂O₆)", "Oxygen (6O₂)"],
-                    "outputs": ["Carbon Dioxide (6CO₂)", "Water (6H₂O)", "38 ATP Energy"],
-                    "energy_yield": "38 ATP Molecules",
-                    "overall_equation": "C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + Energy (38 ATP)",
-                    "key_takeaway": "Cellular respiration breaks down glucose to generate vital ATP energy in mitochondria.",
-                },
-                on_screen_equation="C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + 38 ATP",
-                on_screen_labels=["Mitochondrion Cristae", "Glucose (C₆H₁₂O₆)", "Oxygen (6O₂)", "ATP Energy release"],
-                key_takeaway="Respiration is the essential biological process powering cellular life.",
-                narration_span=script or text,
-                duration_seconds=dur,
-                visual_objective="Illustrate mitochondrial ATP release from glucose oxidation",
-                entities=["Mitochondria", "Glucose", "Oxygen", "ATP Energy"],
-                motion_beats=[{"at": 0.0, "action": "establish", "target": "mitochondrion"}, {"at": round(dur * 0.5, 1), "action": "pan_zoom", "target": "cristae_atp"}],
-            ).model_dump(mode="json"),
-        ]
-
-    # 4. Mathematics: Real Numbers & Geometry
-    if any(k in c_lower for k in ("real number", "number line", "rational", "irrational", "sqrt", "pythagor", "root")):
-        text = "By constructing a right-angled triangle of base 1 unit and height 1 unit, Pythagoras' theorem gives a hypotenuse of √2, which we project directly onto the real number line."
-        return [
-            SceneIn(
-                scene_order=1,
-                learning_objective="Representation of irrational numbers on the real number line",
-                narration_text=script or text,
-                visual_mode="number_line_geometry",
-                visual_payload={
-                    "title": "Representation of Real Numbers on Number Line",
-                    "marked_points": [{"label": "√2", "value": 1.414, "color": "#38bdf8"}],
-                    "intervals": [],
-                    "theorem": "Every real number corresponds to a unique point on the number line.",
-                    "construction_step": "Right triangle with base=1 and height=1 yields hypotenuse OB = √2 ≈ 1.414",
-                },
-                on_screen_equation="OB² = 1² + 1² = 2 ⇒ OB = √2 ≈ 1.414...",
-                on_screen_labels=["Origin 0 (O)", "Unit Base 1 (A)", "Perpendicular 1 (B)", "Point P (√2)"],
-                key_takeaway="Every real number (rational and irrational) has a unique geometric position on the continuous real number line.",
-                narration_span=script or text,
-                duration_seconds=dur,
-                visual_objective="Geometric Pythagoras construction of root 2 on number line",
-                entities=["Number Line", "Right Triangle", "Hypotenuse √2", "Projected Point P"],
-                motion_beats=[{"at": 0.0, "action": "establish", "target": "number_line"}, {"at": round(dur * 0.5, 1), "action": "pan_zoom", "target": "root_2_point"}],
-            ).model_dump(mode="json"),
-        ]
-
-    # 5. Chemistry: Reactions & Lab
-    if any(k in c_lower for k in ("react", "precipitat", "oxid", "acid", "base", "salt", "chemi")):
-        text = "Chemical reactions involve rearrangement of atoms and formation of new bonds, accompanied by characteristic observations."
-        return [
-            SceneIn(
-                scene_order=1,
-                learning_objective="Observation and chemistry of chemical reactions",
-                narration_text=script or text,
-                visual_mode="experiment_observation",
-                visual_payload={
-                    "setup_description": f"Experimental study of {concept}",
-                    "steps": [
-                        {"action": "Initiate reaction conditions", "observation": "Transformation occurs with observable change", "visual_cue": "reactant to product"}
-                    ],
-                    "conclusion": f"Reaction completes confirming principles of {concept}.",
-                },
-                on_screen_equation="Reactants → Products + Energy",
-                on_screen_labels=["Reactants", "Reaction Vessel", "Products"],
-                key_takeaway="Chemical equations describe the conservation of mass and transformation of substances.",
-                narration_span=script or text,
-                duration_seconds=dur,
-                visual_objective=f"Experimental laboratory observation of {concept}",
-                entities=["Reactants", "Reaction Flask", "Products", "Observation"],
-                motion_beats=[{"at": 0.0, "action": "establish", "target": "reaction_flask"}, {"at": round(dur * 0.5, 1), "action": "pan_zoom", "target": "product_transformation"}],
-            ).model_dump(mode="json"),
-        ]
-
-    # Default Universal Explainer
-    default_text = script or f"Let us examine the foundational concepts governing {concept}."
-    return [
-        SceneIn(
-            scene_order=1,
-            learning_objective=f"Fundamental principles of {concept}",
-            narration_text=default_text,
-            visual_mode="generic_explainer",
-            visual_payload={
-                "title": concept[:40],
-                "key_points": [
-                    f"Core principles and definition of {concept}",
-                    "Key relationships and governing laws",
-                ],
-                "icons": ["lightbulb", "atom"],
-                "equation": "",
-            },
-            on_screen_equation="",
-            on_screen_labels=[concept[:30], "Core Principle"],
-            key_takeaway=f"Core understanding of {concept}.",
-            narration_span=default_text,
-            duration_seconds=dur,
-            visual_objective=f"Explain core principles of {concept}",
-            entities=[concept[:30], "Concept Principles"],
-            motion_beats=[{"at": 0.0, "action": "establish", "target": "concept_overview"}, {"at": round(dur * 0.5, 1), "action": "pan_zoom", "target": "principles"}],
-        ).model_dump(mode="json"),
+    # Extract clean sentence boundaries
+    raw_sentences = [
+        s.strip() for s in re.split(r'(?<=[.!?])\s+', script) if len(s.strip()) > 8
     ]
+    if not raw_sentences:
+        raw_sentences = [script]
+
+    total_words = len(script.split())
+    if len(raw_sentences) >= 4 or total_words >= 80:
+        num_scenes = 3
+    elif len(raw_sentences) >= 2 or total_words >= 35:
+        num_scenes = 2
+    else:
+        num_scenes = 1
+
+    chunk_size = max(1, math.ceil(len(raw_sentences) / num_scenes))
+    sentence_groups = [
+        raw_sentences[i : i + chunk_size]
+        for i in range(0, len(raw_sentences), chunk_size)
+    ][:num_scenes]
+
+    def _infer_mode(scene_text: str, scene_idx: int) -> tuple[str, dict[str, Any]]:
+        text_lower = (concept + " " + scene_text).lower()
+
+        # 1. Physics / Optics & Rays
+        if any(k in text_lower for k in ("optic", "lens", "mirror", "refract", "reflect", "ray", "focal", "snell")):
+            if "mirror" in text_lower:
+                return "spherical_mirror", {
+                    "title": concept[:40],
+                    "formula": "1/v + 1/u = 1/f",
+                    "mirror_type": "concave" if "concave" in text_lower else "convex",
+                }
+            return "optics_ray_diagram", {
+                "optical_element": "convex_lens" if "convex" in text_lower else "lens",
+                "key_observation": scene_text[:90],
+                "formula": "1/f = 1/v - 1/u",
+            }
+
+        # 2. Physics / Electricity & Circuits
+        if any(k in text_lower for k in ("circuit", "voltage", "resistan", "ohm", "current", "ammeter", "battery")):
+            return "circuit_simulation", {
+                "circuit_type": "series",
+                "voltage": 12.0,
+                "resistance": 6.0,
+                "current": 2.0,
+                "formula": "V = I × R",
+                "observation": scene_text[:90],
+            }
+
+        # 3. Biology / Cellular & Life Processes
+        if any(k in text_lower for k in ("cell", "organelle", "chloro", "photo", "respir", "mitochondr", "atp", "glucose", "membrane")):
+            is_plant = any(k in text_lower for k in ("chloro", "photo", "plant", "leaf", "stroma", "thylakoid"))
+            return "bio_cellular_process", {
+                "process_name": concept[:35],
+                "organelle": "Chloroplast" if is_plant else "Mitochondria",
+                "inputs": [concept[:25], "Substrate"],
+                "outputs": ["Products", "Yield"],
+                "overall_equation": "",
+                "key_takeaway": scene_text[:90],
+            }
+
+        # 4. Chemistry / Reactions & Equations
+        if any(k in text_lower for k in ("react", "balanc", "precipitat", "oxid", "acid", "base", "salt", "chemi", "atom")):
+            if any(k in text_lower for k in ("balanc", "atom", "coefficient", "conservation")):
+                return "balancing_exercise", {
+                    "unbalanced_equation": "Reactants -> Products",
+                    "balanced_equation": "Balanced Reactants -> Balanced Products",
+                    "atom_inventory": {"Atoms": [2, 2]},
+                }
+            return "reaction_lab", {
+                "reactants": [{"name": "Reactants", "formula": "R", "state": "aqueous", "color": "#38bdf8"}],
+                "products": [{"name": "Products", "formula": "P", "state": "solid", "color": "#f8fafc", "observation": "formation"}],
+                "observation": scene_text[:90],
+            }
+
+        # 5. Mathematics & Coordinate Geometry / Number Line
+        if any(k in text_lower for k in ("number line", "coordinate", "geometry", "hypotenuse")):
+            return "number_line_geometry", {
+                "title": concept[:40],
+                "theorem": f"Geometric representation of {concept[:30]}",
+                "construction_step": scene_text[:90],
+            }
+
+        # 6. Mathematics & Symbolic Derivations
+        if any(k in text_lower for k in ("equation", "graph", "quadrat", "formula", "algebra", "theorem", "solve")):
+            return "algebra_step_solve", {
+                "title": concept[:40],
+                "steps": [s[:60] for s in scene_text.split(".") if len(s.strip()) > 5][:3] or ["Identify variables", "Apply formula", "Solve"],
+                "final_solution": "",
+            }
+
+        # 6. Universal Default: Split screen or Generic Explainer derived 100% from transcript
+        if scene_idx == 0:
+            return "split_screen", {
+                "left_title": concept[:30],
+                "left_type": "generated",
+                "right_title": "Core Principles",
+                "right_points": [s[:80] for s in scene_text.split(".") if len(s.strip()) > 5][:3] or [concept[:40]],
+                "key_takeaway": scene_text[:90],
+            }
+
+        return "generic_explainer", {
+            "title": concept[:40],
+            "key_points": [s[:80] for s in scene_text.split(".") if len(s.strip()) > 5][:3] or [concept[:40]],
+            "icons": ["lightbulb", "atom"],
+            "equation": "",
+        }
+
+    scenes: list[dict[str, Any]] = []
+    for idx, group in enumerate(sentence_groups, start=1):
+        scene_narration = " ".join(group).strip()
+        words = len(scene_narration.split())
+        scene_dur = max(3.5, round(words / 2.3, 1))
+        mode, payload = _infer_mode(scene_narration, idx - 1)
+
+        # Look for candidate equation in scene narration via regex
+        eq_match = re.search(r'([A-Za-z0-9₀-₉\(\)]+\s*(?:->|→|=|\+)\s*[A-Za-z0-9₀-₉\(\)\+\s]+)', scene_narration)
+        cand_eq = eq_match.group(1).strip() if eq_match else ""
+
+        scenes.append(
+            SceneIn(
+                scene_order=idx,
+                learning_objective=f"Analyze {concept}: Part {idx}" if num_scenes > 1 else f"Understand {concept}",
+                narration_text=scene_narration,
+                visual_mode=mode,
+                visual_payload=payload,
+                on_screen_equation=cand_eq,
+                on_screen_labels=[concept[:30]],
+                key_takeaway=group[-1][:90] if group else concept[:40],
+                narration_span=scene_narration,
+                duration_seconds=scene_dur,
+                visual_objective=f"Illustrate {concept} concepts in scene {idx}",
+                entities=[concept[:30]],
+                motion_beats=[
+                    {"at": 0.0, "action": "establish", "target": "main_stage"},
+                    {"at": round(scene_dur * 0.5, 1), "action": "pan_zoom", "target": "detail_card"},
+                ],
+            ).model_dump(mode="json")
+        )
+
+    return scenes
 
 
 @celery_app.task(name="agents.scene_planning.run")

@@ -127,17 +127,14 @@ def render_motion_canvas_spec(
             "[MotionCanvas] Render failed: %s. Initiating graceful fallback.",
             exc,
         )
-        target_path.unlink(missing_ok=True)
-        # Graceful fallback to flick renderer or generic explainer
-        from skills.scene_renderers.flick_renderer import render_flick_motion
+        # Graceful fallback to generic explainer
+        from skills.scene_renderers.chemistry import render_generic_explainer
         fallback_payload = {
-            "template": "step_by_step_flow",
             "title": spec_dict.get("sceneId") or "Lesson Concept",
-            "subtitle": f"Domain: {spec_dict.get('domain', 'general')}",
-            "steps": [obj.get("pedagogicalPurpose") or obj.get("id") for obj in spec_dict.get("objects", [])[:4]],
-            "badge": (spec_dict.get("domain") or "EDUCATIONAL").upper(),
+            "key_points": [obj.get("pedagogicalPurpose") or obj.get("id") for obj in spec_dict.get("objects", [])[:4]] or ["Concept Overview"],
+            "equation": f"Domain: {spec_dict.get('domain', 'general')}",
         }
-        return render_flick_motion(
+        return render_generic_explainer(
             payload_dict=fallback_payload,
             narration_text="",
             duration_seconds=duration_seconds,

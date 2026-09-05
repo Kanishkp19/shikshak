@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 
 VideoProvider = Literal["diagram", "cinematic", "manim", "wan_zerogpu", "flow_cache"]
 TTSProvider = Literal["kokoro", "voicebox", "edge_tts", "coqui", "system"]
-AvatarProvider = Literal["sadtalker", "wav2lip", "still_image"]
+AvatarProvider = Literal["wav2lip", "musetalk", "still_image"]
 
 
 class Settings(BaseModel):
@@ -80,13 +80,13 @@ class Settings(BaseModel):
 
     # ── Avatar rendering ───────────────────────────────────────────────────────
     avatar_provider: AvatarProvider = Field(default="wav2lip", alias="AVATAR_PROVIDER")
-    sadtalker_checkpoint_dir: str = Field(
-        default="./models/sadtalker", alias="SADTALKER_CHECKPOINT_DIR"
-    )
 
     # ── File upload limits ─────────────────────────────────────────────────────
     max_upload_mb: int = 25
     allowed_upload_ext: tuple[str, ...] = (".pdf", ".docx", ".pptx")
+
+    # ── Public API URL (used for media streaming in production) ───────────────
+    public_api_url: str = Field(default="", alias="PUBLIC_API_URL")
 
     # ── Rate limits (per-IP, per-minute) ───────────────────────────────────────
     session_create_rate: int = 10

@@ -147,17 +147,16 @@ def _detect_formula_crisscross(
     keywords = [
         "criss-cross", "criss cross", "valency", "valence", "polyatomic",
         "bracket", "charges balance", "neutrality", "chemical formula",
-        "formula writing", "magnesium chloride", "mgcl2", "mgcl", "al2(so4)3",
-        "combine capacity", "cross-multiply", "combining capacity"
+        "formula writing", "combining capacity", "cross-multiply", "ionic formula",
     ]
     if any(kw in combined for kw in keywords):
         return True
-    
-    # Check if steps look like ions or formula progression (e.g. Mg(+2) Cl(-1))
+
+    # Check if steps look like ions or formula progression (e.g. X(+2) Y(-1))
     if any(re.search(r"\b[A-Z][a-z]?[\+\-\d\(\)]+", s) for s in steps):
         if not any("->" in s or "→" in s for s in steps):
             return True
-            
+
     return False
 
 
@@ -166,34 +165,62 @@ def _extract_ions_from_context(
     final_equation: str,
     narration: str,
 ) -> Tuple[dict[str, Any], dict[str, Any], str]:
-    """Extract cation and anion details for formula building."""
+    """Extract cation and anion details dynamically from text and chemical symbols."""
     combined = f"{' '.join(steps)} {final_equation} {narration}".lower()
-    
-    # Aluminum Sulfate Al2(SO4)3
-    if "aluminum" in combined or "alumin" in combined or "so4" in combined or "sulfate" in combined:
-        cation = {"symbol": "Al", "charge": "+3", "valency": 3, "name": "Aluminum", "grad": "sphere-slate", "color": "#64748b"}
-        anion = {"symbol": "SO₄", "charge": "-2", "valency": 2, "name": "Sulfate (Polyatomic)", "grad": "sphere-gold", "color": "#d97706", "is_polyatomic": True}
-        formula = "Al₂(SO₄)₃"
-        return cation, anion, formula
 
-    # Sodium Chloride NaCl
-    if "sodium chloride" in combined or "nacl" in combined:
-        cation = {"symbol": "Na", "charge": "+1", "valency": 1, "name": "Sodium", "grad": "sphere-purple", "color": "#8b5cf6"}
-        anion = {"symbol": "Cl", "charge": "-1", "valency": 1, "name": "Chloride", "grad": "sphere-emerald", "color": "#10b981"}
-        formula = "NaCl"
-        return cation, anion, formula
+    # Standard general chemical ions lookup
+    ION_REGISTRY = {
+        "aluminum": ({"symbol": "Al", "charge": "+3", "valency": 3, "name": "Aluminum", "grad": "sphere-slate", "color": "#64748b"}, 3),
+        "alumin": ({"symbol": "Al", "charge": "+3", "valency": 3, "name": "Aluminum", "grad": "sphere-slate", "color": "#64748b"}, 3),
+        "sodium": ({"symbol": "Na", "charge": "+1", "valency": 1, "name": "Sodium", "grad": "sphere-purple", "color": "#8b5cf6"}, 1),
+        "calcium": ({"symbol": "Ca", "charge": "+2", "valency": 2, "name": "Calcium", "grad": "sphere-cyan", "color": "#06b6d4"}, 2),
+        "magnesium": ({"symbol": "Mg", "charge": "+2", "valency": 2, "name": "Magnesium", "grad": "sphere-teal", "color": "#0d9488"}, 2),
+        "potassium": ({"symbol": "K", "charge": "+1", "valency": 1, "name": "Potassium", "grad": "sphere-purple", "color": "#8b5cf6"}, 1),
+        "iron": ({"symbol": "Fe", "charge": "+3", "valency": 3, "name": "Iron(III)", "grad": "sphere-amber", "color": "#d97706"}, 3),
+        "copper": ({"symbol": "Cu", "charge": "+2", "valency": 2, "name": "Copper(II)", "grad": "sphere-cyan", "color": "#0284c7"}, 2),
+        "zinc": ({"symbol": "Zn", "charge": "+2", "valency": 2, "name": "Zinc", "grad": "sphere-slate", "color": "#94a3b8"}, 2),
+    }
 
-    # Calcium Hydroxide Ca(OH)2
-    if "calcium" in combined or "hydroxide" in combined or "ca(oh)2" in combined:
-        cation = {"symbol": "Ca", "charge": "+2", "valency": 2, "name": "Calcium", "grad": "sphere-cyan", "color": "#06b6d4"}
-        anion = {"symbol": "OH", "charge": "-1", "valency": 1, "name": "Hydroxide (Polyatomic)", "grad": "sphere-teal", "color": "#0d9488", "is_polyatomic": True}
-        formula = "Ca(OH)₂"
-        return cation, anion, formula
+    ANION_REGISTRY = {
+        "sulfate": ({"symbol": "SO₄", "charge": "-2", "valency": 2, "name": "Sulfate", "grad": "sphere-gold", "color": "#d97706", "is_polyatomic": True}, 2),
+        "chloride": ({"symbol": "Cl", "charge": "-1", "valency": 1, "name": "Chloride", "grad": "sphere-emerald", "color": "#10b981"}, 1),
+        "hydroxide": ({"symbol": "OH", "charge": "-1", "valency": 1, "name": "Hydroxide", "grad": "sphere-teal", "color": "#0d9488", "is_polyatomic": True}, 1),
+        "oxide": ({"symbol": "O", "charge": "-2", "valency": 2, "name": "Oxide", "grad": "sphere-red", "color": "#ef4444"}, 2),
+        "nitrate": ({"symbol": "NO₃", "charge": "-1", "valency": 1, "name": "Nitrate", "grad": "sphere-blue", "color": "#3b82f6", "is_polyatomic": True}, 1),
+        "carbonate": ({"symbol": "CO₃", "charge": "-2", "valency": 2, "name": "Carbonate", "grad": "sphere-amber", "color": "#f59e0b", "is_polyatomic": True}, 2),
+    }
 
-    # Default / Standard NCERT flagship: Magnesium Chloride MgCl2
-    cation = {"symbol": "Mg", "charge": "+2", "valency": 2, "name": "Magnesium Ion", "grad": "sphere-teal", "color": "#0d9488"}
-    anion = {"symbol": "Cl", "charge": "-1", "valency": 1, "name": "Chloride Ion", "grad": "sphere-emerald", "color": "#10b981"}
-    formula = "MgCl₂"
+    detected_cation = None
+    c_val = 2
+    for k, (cat_info, v) in ION_REGISTRY.items():
+        if k in combined or cat_info["symbol"].lower() in combined:
+            detected_cation = cat_info
+            c_val = v
+            break
+
+    detected_anion = None
+    a_val = 1
+    for k, (ani_info, v) in ANION_REGISTRY.items():
+        if k in combined or ani_info["symbol"].lower() in combined:
+            detected_anion = ani_info
+            a_val = v
+            break
+
+    cation = detected_cation or {"symbol": "M", "charge": "+2", "valency": 2, "name": "Metal Cation", "grad": "sphere-teal", "color": "#0d9488"}
+    anion = detected_anion or {"symbol": "X", "charge": "-1", "valency": 1, "name": "Anion", "grad": "sphere-emerald", "color": "#10b981"}
+
+    # Dynamically compute formula from valencies
+    if c_val == a_val:
+        formula = f"{cation['symbol']}{anion['symbol']}"
+    else:
+        # Cross valencies
+        c_sub = f"_{a_val}" if a_val > 1 else ""
+        if anion.get("is_polyatomic") and c_val > 1:
+            a_sub = f"({anion['symbol']})_{c_val}"
+        else:
+            a_sub = f"{anion['symbol']}_{c_val}" if c_val > 1 else anion["symbol"]
+        formula = format_subscripts(f"{cation['symbol']}{c_sub}{a_sub}")
+
     return cation, anion, formula
 
 

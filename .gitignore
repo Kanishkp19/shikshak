@@ -145,9 +145,7 @@ celerybeat.pid
 *.safetensors
 *.h5
 
-# Specific model engines / cloned sub-repos
-Wav2Lip/
-**/Wav2Lip/
+# Specific model checkpoints
 models/xtts_v2/
 **/models/xtts_v2/
 **/checkpoints/
@@ -179,9 +177,6 @@ supabase/.temp/
 # ------------------------------------------------------------------------------
 graphify-out/cache/
 
-# ------------------------------------------------------------------------------
-# 9. Local Development Tools & Utilities
-# ------------------------------------------------------------------------------
-tools/
+
 
 

@@ -346,19 +346,36 @@ class DiagramProvider(VideoGenerationProvider):
         if scenes_list and not bio_structure and not is_circuit and not compound_name:
             import shutil
             from agents.visual_selection import dispatch_scene_render
-            from skills.video_stitching import concat_segments
+            from skills.video_stitching import concat_segments_with_transitions
 
             scene_paths: list[str] = []
-            per_scene_dur = max(2.0, float(duration_seconds) / len(scenes_list))
+            # Calculate speech-paced duration for each scene based on narration text
+            scene_word_counts = [
+                max(1, len((sc.get("narration_text") or sc.get("narration_span") or "").split()))
+                for sc in scenes_list
+            ]
+            total_words = sum(scene_word_counts)
+            total_dur = max(float(duration_seconds), float(len(scenes_list) * 3.0))
+
             for s_idx, sc in enumerate(scenes_list):
+                # If explicit scene duration provided and reasonable, use it; otherwise distribute proportionally
+                explicit_dur = float(sc.get("duration_seconds", 0))
+                if explicit_dur >= 2.5:
+                    sc_dur = explicit_dur
+                elif total_words > 0:
+                    sc_dur = max(3.0, round((scene_word_counts[s_idx] / total_words) * total_dur, 1))
+                else:
+                    sc_dur = max(3.0, total_dur / len(scenes_list))
+
                 sc_out = Path("/tmp/shikshak_concept") / f"scene_{uuid.uuid4().hex}.mp4"
-                rendered = dispatch_scene_render(sc, duration_seconds=per_scene_dur, out_path=sc_out)
+                rendered = dispatch_scene_render(sc, duration_seconds=sc_dur, out_path=sc_out)
                 scene_paths.append(str(rendered))
+
 
             if len(scene_paths) == 1:
                 shutil.copy(scene_paths[0], str(target_path))
             else:
-                combined = concat_segments(scene_paths)
+                combined = concat_segments_with_transitions(scene_paths, transition="fade", transition_duration=0.4)
                 shutil.copy(combined, str(target_path))
 
             require_playable_video(target_path, min_width=1280, min_height=720, min_duration_seconds=1.0)
