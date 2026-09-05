@@ -45,9 +45,13 @@ def render_circuit_svg(spec: CircuitDiagramSpec, elapsed_ms: int = 0, theme: str
     asset_paths = {item.id: ASSET_ROOT / _symbol_filename(item.component_type, item.state) for item in spec.components}
     if any(not path.is_file() for path in asset_paths.values()):
         return ""
+    dash_attr = (
+        f'stroke-dasharray="12 9" stroke-dashoffset="{current_flow_dash_offset(elapsed_ms)}"'
+        if spec.highlight_current_path
+        else ""
+    )
     wires = "".join(
-        f'<polyline points="{" ".join(f"{x},{y}" for x, y in path)}" fill="none" stroke="{tokens["edge_color"]}" stroke-width="4" '
-        f'{"stroke-dasharray=\"12 9\" stroke-dashoffset=\"" + str(current_flow_dash_offset(elapsed_ms)) + "\"" if spec.highlight_current_path else ""}/>'
+        f'<polyline points="{" ".join(f"{x},{y}" for x, y in path)}" fill="none" stroke="{tokens["edge_color"]}" stroke-width="4" {dash_attr}/>'
         for path in layout.wire_paths
     )
     symbols = ""

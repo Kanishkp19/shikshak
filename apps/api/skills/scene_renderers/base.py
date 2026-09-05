@@ -17,7 +17,10 @@ from typing import Any, Callable, Protocol
 # Ensure Cairo libraries are found on macOS
 os.environ.setdefault("DYLD_FALLBACK_LIBRARY_PATH", "/opt/homebrew/lib:/usr/local/lib")
 
-import cairosvg
+try:
+    import cairosvg
+except (ImportError, OSError):
+    cairosvg = None
 from skills.video_generation.media import require_playable_video
 
 
@@ -92,6 +95,9 @@ def render_svg_frames_to_mp4(
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE,
     )
+
+    if cairosvg is None:
+        raise RuntimeError("cairosvg is not installed or Cairo system library is missing.")
 
     try:
         for frame_idx in range(total_frames):
